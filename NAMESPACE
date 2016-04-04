@@ -1,0 +1,5 @@
+importFrom('plyr', llply, mdply)
+importFrom('lubridate', hour, minutes, hours, days)
+import('dplyr')
+
+exportPattern("^[[:alpha:]]+")

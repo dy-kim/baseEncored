@@ -1,0 +1,2 @@
+TIME_ORIGIN <- '1970-01-01'
+TZ_DEFAULT  <- 'Asia/Seoul'
