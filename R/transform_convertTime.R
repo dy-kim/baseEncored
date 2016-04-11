@@ -1,61 +1,63 @@
+# TODO: 함수명이 길다. 줄여보자.
+
 convertHumanDate2customTZ <- function(date, time_zone) {
   stopifnot(time_zone %in% OlsonNames())
-  as.POSIXct(date, origin = TIME_ORIGIN, tz = time_zone) %>%
-    return()
+  as.POSIXct(date, origin = TIME_ORIGIN, tz = time_zone) -> result
+  return(result)
 }
 
 convertHumanDate2KST <- function(date_KST) {
   convertHumanDate2customTZ(date = date_KST,
-                            time_zone = 'Asia/Seoul') %>%
-    return()
+                            time_zone = 'Asia/Seoul') -> result
+  return(result)
 }
 
 convertHumanDate2UTC <- function(date_UTC) {
   convertHumanDate2customTZ(date = date_UTC,
-                            time_zone = 'UTC') %>%
-    return()
+                            time_zone = 'UTC') -> result
+  return(result)
 }
 
 convertHumanDateKST2timestampUTC <- function(date_KST) {
   convertHumanDate2KST(date_KST) %>%
     as.numeric() %>%
-    floor() %>%
-    return()
+    floor() -> result
+  return(result)
 }
 
 convertTimestampUTC2HumandateCustomTZ <-
   function(timestamp_ms, time_zone) {
     stopifnot(time_zone %in% OlsonNames())
     convertHumanDate2customTZ(date = as.numeric(timestamp_ms) / 1000,
-                              time_zone = time_zone) %>%
-      return()
+                              time_zone = time_zone) -> result
+    return(result)
   }
 
 convertTimestampUTC2HumandateKST <- function(timestamp_ms) {
-  convertTimestampUTC2HumandateCustomTZ(timestamp_ms, 'Asia/Seoul') %>%
-    return()
+  convertTimestampUTC2HumandateCustomTZ(timestamp_ms, 'Asia/Seoul') -> result
+  return(result)
 }
 
 convertTimezone <- function(dateTimeClass, TZ_to) {
   stopifnot(TZ_to %in% OlsonNames())
-
+  
   format(x = dateTimeClass, tz = TZ_to) %>%
-    convertHumanDate2customTZ(time_zone = TZ_to) %>%
-    return()
+    convertHumanDate2customTZ(time_zone = TZ_to) -> result
+  return(result)
 }
 
 convertJsonDateEncored <-
   function(date_UTC, target_TZ = TZ_DEFAULT) {
     stopifnot(target_TZ %in% OlsonNames())
-
+    
     human.date.utc <-
       as.character(date_UTC) %>%
       str_replace(pattern = 'T', replacement = ' ') %>%
       str_replace(pattern = 'Z', replacement = '')
-
+    
     convertHumanDate2UTC(human.date.utc) %>%
-      convertTimezone(TZ_to = target_TZ) %>%
-      return()
+      convertTimezone(TZ_to = target_TZ) -> result
+    return(result)
   }
 
 timeSequenceEncored <-
@@ -65,12 +67,12 @@ timeSequenceEncored <-
            num_seq = NULL,
            tz = TZ_DEFAULT) {
     stopifnot(tz %in% OlsonNames())
-
+    
     time.unit  <- match.arg(time_unit)
-
+    
     start <- convertHumanDate2customTZ(start_date, tz)
     end   <- convertHumanDate2customTZ(end_date, tz)
-
+    
     seq(
       from = start,
       to   = end,
@@ -79,14 +81,14 @@ timeSequenceEncored <-
         yes  = convertTimeUnitAsSec(time.unit),
         no   = as.numeric(difftime(end, start, tz, units = 'sec') / num_seq)
       )
-    ) %>%
-      return()
+    ) -> result
+    return(result)
   }
 
 countTimeSlot <- function(start_date, end_date, time_unit) {
   timeSequenceEncored(start_date, end_date, time_unit) %>%
-    length() %>%
-    return()
+    length() -> result
+  return(result)
 }
 
 convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
@@ -96,33 +98,34 @@ convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
     'hourly'  = 60 * 60,
     'daily'   = 60 * 60 * 24,
     'monthly' = 60 * 60 * 24 * 30
-  ) %>%
-    return()
+  ) -> result
+  return(result)
 }
 
 roundTime <- function(time_obj, time_unit, round_func) {
   time.unit.as.sec <- convertTimeUnitAsSec(time_unit)
   first.regular.time.as.sec <-
     round_func(as.numeric(time_obj) / time.unit.as.sec) * time.unit.as.sec
-
-  convertTimestampUTC2HumandateKST(timestamp_ms = first.regular.time.as.sec * 1000) %>%
-    return()
+  
+  first.regular.time.as.sec * 1000 %>%
+    convertTimestampUTC2HumandateKST() -> result
+  return(result)
 }
 
 getQueryTimestamp <- function(date_KST) {
   format(convertHumanDateKST2timestampUTC(date_KST) * 1000,
-         scientific = FALSE) %>%
-    return()
+         scientific = FALSE) -> result
+  return(result)
 }
 
 getQueryStartTimestamp <- function(start_date) {
-  paste0('start=', getQueryTimestamp(start_date)) %>%
-    return()
+  paste0('start=', getQueryTimestamp(start_date)) -> result
+  return(result)
 }
 
-getQueryEndTimestamp <- function(start_date) {
-  paste0('end=', getQueryTimestamp(start_date)) %>%
-    return()
+getQueryEndTimestamp <- function(end_date) {
+  paste0('end=', getQueryTimestamp(end_date)) -> result
+  return(result)
 }
 
 convertTimeUnit2PeriodClass <-
@@ -133,41 +136,34 @@ convertTimeUnit2PeriodClass <-
       '15min'  = minutes(15),
       'hourly' = hours(1),
       'daily'  = days(1)
-    ) %>%
-      return()
+    ) -> result
+    return(result)
   }
 
 sysTimeEncored <- function() {
   Sys.time() %>%
-    format(format = '%Y-%m-%d %H:%M:%S') %>%
-    return()
+    format(format = '%Y-%m-%d %H:%M:%S') -> result
+  return(result)
 }
 
 isTimestampUnitSecond <- function(timestamp) {
-  timestamp <- tryCatch(
-    expr = as.numeric(timestamp),
-    error = function(e) {
-      return(NULL)
-    },
-    warning = function(w) {
-      if (w$message == "NAs introduced by coercion")
-        return(NULL)
-    }
-  )
-
+  # '2286-11-21 02:46:39'까지가 nchar(timestamp) == 10
+  
+  timestamp <- assureNumeric(timestamp)
+  
   if (is.null(timestamp)) {
     warning('Please check that the input for timestamp is proper type. Return NULL.')
     return(NULL)
   }
-
+  
   date.max <- '9999-12-31'
   timsestamp.second.unit.max <-
     date.max %>%
     convertHumanDateKST2timestampUTC() %>%
     convertTimestampUTC2HumandateKST()
-
+  
   is.unit.second <-
     convertTimestampUTC2HumandateKST(max(timestamp)) < timsestamp.second.unit.max
-
+  
   return(is.unit.second)
 }

@@ -25,8 +25,8 @@ listFilesVectorized <- function(path, pattern, ...) {
          function(x) {
            list.files(pattern = x, path, ...)
          }) %>%
-    unlist() %>%
-    return()
+    unlist() -> result
+    return(result)
 }
 
 makeFileNamePattern <- function(file_name, file_extension) {
@@ -39,8 +39,8 @@ makeFileNamePattern <- function(file_name, file_extension) {
 
 chkFileExtension <- function(file_name, file_extension) {
   grepl(pattern = paste0('\\.', file_extension),
-        file_name) %>%
-    return()
+        file_name) -> result
+    return(result)
 }
 
 isCsv <- function(file_name) {

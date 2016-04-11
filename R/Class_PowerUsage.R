@@ -42,12 +42,13 @@ convertPowerUnit <- function(usage,
 }
 
 getRelativeCoeff_mW_Base <- function(power_unit) {
-  return(switch(
+  switch(
     power_unit,
     'mW'  = 1,
     'W'   = 1000,
     'kW'  = 1000000
-  ))
+  ) %>%
+    return()
 }
 
 updateTime.PowerUsage <- function(obj, time_unit = c()) {

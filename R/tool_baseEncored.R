@@ -1,12 +1,12 @@
 grepMulti <- function(pattern, x) {
   if (any('*' %in% pattern)) {
-    grep(pattern, x) %>%
-      return()
+    grep(pattern, x) -> result
+    return(result)
   } else {
     paste0('^', pattern, '$') %>%
       llply(.fun = grep, x = x, perl = TRUE) %>%
-      unlist() %>%
-      return()
+      unlist() -> result
+    return(result)
   }
 }
 
@@ -19,10 +19,10 @@ whichMulti <- function(pattern, x) {
         },
         x = x
       ) %>%
-      unlist() %>%
-      return()
+      unlist() -> result
+    return(result)
   }
-
+  
   pattern %>%
     llply(
       .fun = function(pattern, x) {
@@ -30,6 +30,6 @@ whichMulti <- function(pattern, x) {
       },
       x = x
     ) %>%
-    unlist() %>%
-    return()
+    unlist() -> result
+    return(result)
 }
