@@ -1,5 +1,6 @@
 importFrom('plyr', llply, mdply)
 importFrom('lubridate', hour, minutes, hours, days)
+importFrom('stringr', str_replace)
 import('dplyr')
 
 exportPattern("^[[:alpha:]]+")

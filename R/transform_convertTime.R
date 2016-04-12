@@ -20,8 +20,8 @@ convertHumanDate2UTC <- function(date_UTC) {
 
 convertHumanDateKST2timestampUTC <- function(date_KST) {
   convertHumanDate2KST(date_KST) %>%
-    as.numeric() %>%
-    floor() -> result
+    as.numeric() -> result
+    # floor()
   return(result)
 }
 
@@ -104,10 +104,10 @@ convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
 
 roundTime <- function(time_obj, time_unit, round_func) {
   time.unit.as.sec <- convertTimeUnitAsSec(time_unit)
-  first.regular.time.as.sec <-
-    round_func(as.numeric(time_obj) / time.unit.as.sec) * time.unit.as.sec
+  first.regular.time.as.mills <-
+    round_func(as.numeric(time_obj) / time.unit.as.sec) * time.unit.as.sec * 1000
   
-  first.regular.time.as.sec * 1000 %>%
+  first.regular.time.as.mills %>%
     convertTimestampUTC2HumandateKST() -> result
   return(result)
 }

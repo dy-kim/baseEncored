@@ -70,3 +70,11 @@ convertBin2Dec <- function(bin_value) {
     sum() -> result
   return(result)
 }
+
+divideByThousand <- function(x) {
+  return(x / 1000)
+}
+
+asNumericAndRound <- function(tbl, digits = 3) {
+  suppressWarnings(return(as.numeric(round(tbl, digits))))
+}
