@@ -3,4 +3,5 @@ importFrom('lubridate', hour, minutes, hours, days)
 importFrom('stringr', str_replace)
 import('dplyr')
 
+export("%w/o%")
 exportPattern("^[[:alpha:]]+")
