@@ -14,3 +14,11 @@ getTimeUnitSet <-
 getPowerUnitSet <- function() {
   return(c('mW', 'W', 'kW'))
 }
+
+getDbGroup <- function() {
+  return(c("getit", "production", "setup", "data_cache"))
+}
+
+getDbConfigDir <- function() {
+  return('/etc/.my.cnf')
+}
