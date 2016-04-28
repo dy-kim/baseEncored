@@ -113,8 +113,8 @@ roundTime <- function(time_obj, time_unit, round_func) {
 }
 
 getQueryTimestamp <- function(date_KST) {
-  format(convertHumanDateKST2timestampUTC(date_KST) * 1000,
-         scientific = FALSE) -> result
+  (convertHumanDateKST2timestampUTC(date_KST) * 1000) %>%
+    formatNonSci() -> result
   return(result)
 }
 

@@ -33,3 +33,34 @@ whichMulti <- function(pattern, x) {
     unlist() -> result
     return(result)
 }
+
+divideByThousand <- function(x) {
+  return(x / 1000)
+}
+
+asNumericAndRound <- function(tbl, digits = 3) {
+  suppressWarnings(return(as.numeric(round(tbl, digits))))
+}
+
+asNumericFullSignificantFigure <- function(value) {
+  expandSciNotation(value)
+  return(as.numeric(value))
+}
+
+assureNumeric <- function(val) {
+  result <- tryCatch(
+    expr = as.numeric(val),
+    error = function(e) {
+      return(NULL)
+    },
+    warning = function(w) {
+      if (w$message == "NAs introduced by coercion")
+        return(NULL)
+    }
+  )
+  return(result)
+}
+
+formatNonSci <- function(value) {
+  return(format(value, scientific = FALSE))
+}

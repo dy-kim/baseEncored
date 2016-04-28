@@ -16,9 +16,13 @@ getPowerUnitSet <- function() {
 }
 
 getDbGroup <- function() {
-  return(c("getit", "production", "setup", "data_cache"))
+  return(c('getit', 'production', 'setup', 'data_cache'))
 }
 
 getDbConfigDir <- function() {
   return('/etc/.my.cnf')
+}
+
+getConvertibleBase <- function() {
+  return(c('2', '10', '16'))
 }

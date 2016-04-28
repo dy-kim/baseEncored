@@ -4,4 +4,5 @@ importFrom('stringr', str_replace)
 import('dplyr')
 
 export("%w/o%")
+
 exportPattern("^[[:alpha:]]+")
