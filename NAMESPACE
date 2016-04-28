@@ -1,6 +1,8 @@
 importFrom('plyr', llply, mdply)
 importFrom('lubridate', hour, minutes, hours, days)
 importFrom('stringr', str_replace)
+importFrom('devtools', install_github)
+
 import('dplyr')
 
 export("%w/o%")
