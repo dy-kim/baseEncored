@@ -1,8 +1,9 @@
-convertBase <-
+convertBaseCore <-
   function(input_value,
            input_base = getConvertibleBase(),
            output_base = getConvertibleBase()) {
     stopifnot(chkSysName('Linux'))
+    stopifnot(!missing(input_value))
     
     input_base  <- as.character(input_base)
     output_base <- as.character(output_base)
@@ -27,7 +28,6 @@ convertBase <-
       ifelse(test = output.base == '10',
              yes = asNumericFullSignificantFigure(result),
              no = result)
-    
     return(result)
   }
 
@@ -56,6 +56,10 @@ bcInterface <- function(code) {
     system(intern = TRUE) -> result
   return(result)
 }
+
+convertBase <-
+  Vectorize(FUN = convertBaseCore,
+            vectorize.args = 'input_value')
 
 ######################
 #  Applied Functions
@@ -136,18 +140,18 @@ convertBin2Dec <- function(bin_value) {
 #     as.numeric() -> result
 #   return(result)
 # }
-# 
+#
 # convertDec2Hex <- function(dec_value) {
 #   dec.val <- assureNumeric(dec_value)
-#   
+#
 #   if (is.null(dec.val)) {
 #     message('Input value is not numeric. Return NULL.')
 #     return(NULL)
 #   }
-#   
+#
 #   return(result)
 # }
-# 
+#
 # convertDec2Bin <- function(dec_value) {
 #   dec.val <- assureNumeric(dec_value)
 #   if (is.null(dec.val)) {
@@ -155,33 +159,33 @@ convertBin2Dec <- function(bin_value) {
 #     return(NULL)
 #   }
 #   bits <- intToBits(dec.val)
-#   
+#
 #   bits %>%
 #     as.integer() %>%
 #     rev() %>%
 #     paste(collapse = "") -> binary.val
-#   
+#
 #   options(scipen = nchar(binary.val))
 #   as.numeric(binary.val) -> result
 #   return(result)
 # }
-# 
+#
 # convertBin2Dec <- function(bin_value) {
 #   bin.val <- assureNumeric(bin_value)
 #   if (is.null(bin.val)) {
 #     message('Input value is not numeric. Return NULL.')
 #     return(NULL)
 #   }
-#   
+#
 #   as.character(bin.val) %>%
 #     strsplit(split = "") %>%
 #     unlist() -> figure
-#   
+#
 #   if (!all(figure %in% c("0", "1"))) {
 #     warning('Invalid binary value. Return NULL.')
 #     return(NULL)
 #   }
-#   
+#
 #   digits.on <- which(rev(figure) == "1")
 #   2 ^ digits.on %>%
 #     sum() -> result

@@ -1,8 +1,8 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.1.6
-Date: 2016-04-28
+Version: 0.1.7
+Date: 2016-05-03
 Authors@R:
   person(given  = "Dae Young", family = "Kim",
          role   = c("aut", "cre"),
