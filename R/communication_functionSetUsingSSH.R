@@ -1,3 +1,4 @@
+#' @export
 chkRemoteFileExistence <- function(remote_file,
                                    user,
                                    passwd,
@@ -12,11 +13,13 @@ chkRemoteFileExistence <- function(remote_file,
   return(result)
 }
 
+#' @export
 sshpassWrapper <- function(cmd, passwd) {
   paste('sshpass -p', passwd, cmd) -> result
   return(result)
 }
 
+#' @export
 remoteRunWrapper <- function(cmd, user, passwd, IP_address, port) {
   cmd.ssh <- paste(
     'ssh -o StrictHostKeyChecking=no -p',
@@ -28,11 +31,13 @@ remoteRunWrapper <- function(cmd, user, passwd, IP_address, port) {
   return(result)
 }
 
+#' @export
 scpWrapper <- function(port, src, dst) {
   paste('scp -o StrictHostKeyChecking=no -P', port, src, dst) -> result
   return(result)
 }
 
+#' @export
 runRemoteScript <- function(result_fileName,
                             msg_priorRun,
                             command_runScript,
@@ -67,6 +72,7 @@ runRemoteScript <- function(result_fileName,
   return(TRUE)
 }
 
+#' @export
 scpFileToRemote <- function(file_path,
                             remote_dst,
                             user_id,
@@ -81,6 +87,7 @@ scpFileToRemote <- function(file_path,
     system()
 }
 
+#' @export
 scpFileFromRemote <- function(remote_fileName,
                               remote_src_dir,
                               local_dst_dir,

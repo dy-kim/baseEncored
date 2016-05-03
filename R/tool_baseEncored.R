@@ -1,3 +1,4 @@
+#' @export
 grepMulti <- function(pattern, x) {
   if (any('*' %in% pattern)) {
     grep(pattern, x) -> result
@@ -10,6 +11,7 @@ grepMulti <- function(pattern, x) {
   }
 }
 
+#' @export
 whichMulti <- function(pattern, x) {
   if (pattern == '*') {
     pattern %>%
@@ -34,19 +36,23 @@ whichMulti <- function(pattern, x) {
     return(result)
 }
 
+#' @export
 divideByThousand <- function(x) {
   return(x / 1000)
 }
 
+#' @export
 asNumericAndRound <- function(tbl, digits = 3) {
   suppressWarnings(return(as.numeric(round(tbl, digits))))
 }
 
+#' @export
 asNumericFullSignificantFigure <- function(value) {
   expandSciNotation(value)
   return(as.numeric(value))
 }
 
+#' @export
 assureNumeric <- function(val) {
   result <- tryCatch(
     expr = as.numeric(val),
@@ -61,6 +67,7 @@ assureNumeric <- function(val) {
   return(result)
 }
 
+#' @export
 formatNonSci <- function(value) {
   return(format(value, scientific = FALSE))
 }

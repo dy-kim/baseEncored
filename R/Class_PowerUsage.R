@@ -1,3 +1,4 @@
+#' @export
 PowerUsage <- function(obj,
                        time_unit  = getTimeUnitSet(),
                        power_unit = getPowerUnitSet()) {
@@ -16,6 +17,7 @@ PowerUsage <- function(obj,
   return(obj)
 }
 
+#' @export
 updatePower.PowerUsage <-
   function(obj, power_unit = getPowerUnitSet()) {
     if (!('PowerUsage' %in% class(obj)))
@@ -32,6 +34,7 @@ updatePower.PowerUsage <-
     return(obj)
   }
 
+#' @export
 convertPowerUnit <- function(usage,
                              from = getPowerUnitSet(),
                              to   = getPowerUnitSet()) {
@@ -41,6 +44,7 @@ convertPowerUnit <- function(usage,
   return(usage * getRelativeCoeff_mW_Base(from) / getRelativeCoeff_mW_Base(to))
 }
 
+#' @export
 getRelativeCoeff_mW_Base <- function(power_unit) {
   switch(
     power_unit,

@@ -1,23 +1,27 @@
 # TODO: 함수명이 길다. 줄여보자.
 
+#' @export
 convertHumanDate2customTZ <- function(date, time_zone) {
   stopifnot(time_zone %in% OlsonNames())
   as.POSIXct(date, origin = TIME_ORIGIN, tz = time_zone) -> result
   return(result)
 }
 
+#' @export
 convertHumanDate2KST <- function(date_KST) {
   convertHumanDate2customTZ(date = date_KST,
                             time_zone = 'Asia/Seoul') -> result
   return(result)
 }
 
+#' @export
 convertHumanDate2UTC <- function(date_UTC) {
   convertHumanDate2customTZ(date = date_UTC,
                             time_zone = 'UTC') -> result
   return(result)
 }
 
+#' @export
 convertHumanDateKST2timestampUTC <- function(date_KST) {
   convertHumanDate2KST(date_KST) %>%
     as.numeric() -> result
@@ -25,6 +29,7 @@ convertHumanDateKST2timestampUTC <- function(date_KST) {
   return(result)
 }
 
+#' @export
 convertTimestampUTC2HumandateCustomTZ <-
   function(timestamp_ms, time_zone) {
     stopifnot(time_zone %in% OlsonNames())
@@ -33,11 +38,13 @@ convertTimestampUTC2HumandateCustomTZ <-
     return(result)
   }
 
+#' @export
 convertTimestampUTC2HumandateKST <- function(timestamp_ms) {
   convertTimestampUTC2HumandateCustomTZ(timestamp_ms, 'Asia/Seoul') -> result
   return(result)
 }
 
+#' @export
 convertTimezone <- function(dateTimeClass, TZ_to) {
   stopifnot(TZ_to %in% OlsonNames())
   
@@ -46,6 +53,7 @@ convertTimezone <- function(dateTimeClass, TZ_to) {
   return(result)
 }
 
+#' @export
 convertJsonDateEncored <-
   function(date_UTC, target_TZ = TZ_DEFAULT) {
     stopifnot(target_TZ %in% OlsonNames())
@@ -60,6 +68,7 @@ convertJsonDateEncored <-
     return(result)
   }
 
+#' @export
 timeSequenceEncored <-
   function(start_date,
            end_date,
@@ -85,12 +94,14 @@ timeSequenceEncored <-
     return(result)
   }
 
+#' @export
 countTimeSlot <- function(start_date, end_date, time_unit) {
   timeSequenceEncored(start_date, end_date, time_unit) %>%
     length() -> result
   return(result)
 }
 
+#' @export
 convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
   switch(
     match.arg(time_unit),
@@ -102,6 +113,7 @@ convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
   return(result)
 }
 
+#' @export
 roundTime <- function(time_obj, time_unit, round_func) {
   time.unit.as.sec <- convertTimeUnitAsSec(time_unit)
   first.regular.time.as.mills <-
@@ -112,22 +124,26 @@ roundTime <- function(time_obj, time_unit, round_func) {
   return(result)
 }
 
+#' @export
 getQueryTimestamp <- function(date_KST) {
   (convertHumanDateKST2timestampUTC(date_KST) * 1000) %>%
     formatNonSci() -> result
   return(result)
 }
 
+#' @export
 getQueryStartTimestamp <- function(start_date) {
   paste0('start=', getQueryTimestamp(start_date)) -> result
   return(result)
 }
 
+#' @export
 getQueryEndTimestamp <- function(end_date) {
   paste0('end=', getQueryTimestamp(end_date)) -> result
   return(result)
 }
 
+#' @export
 convertTimeUnit2PeriodClass <-
   function(time_unit = getTimeUnitSet()) {
     time.unit <- match.arg(time_unit)
@@ -140,12 +156,14 @@ convertTimeUnit2PeriodClass <-
     return(result)
   }
 
+#' @export
 sysTimeEncored <- function() {
   Sys.time() %>%
     format(format = '%Y-%m-%d %H:%M:%S') -> result
   return(result)
 }
 
+#' @export
 isTimestampUnitSecond <- function(timestamp) {
   # '2286-11-21 02:46:39'까지가 nchar(timestamp) == 10
   

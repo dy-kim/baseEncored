@@ -1,24 +1,23 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.1.7
+Version: 0.1.8
 Date: 2016-05-03
-Authors@R:
-  person(given  = "Dae Young", family = "Kim",
+Authors@R: person(given  = "Dae Young", family = "Kim",
          role   = c("aut", "cre"),
          email  = "dykim22@encoredtech.com")
-Maintainer:
-  Dae Young Kim <dykim22@encoredtech.com>
-Description:
-  Supplying basic functionalities required for the custom packages designed by Encored Technologies
+Maintainer: Dae Young Kim <dykim22@encoredtech.com>
+Description: Supplying basic functionalities required for the custom packages
+    designed by Encored Technologies
 Depends:
-  R (>= 3.2.0)
+    R (>= 3.2.0)
 Imports:
-  plyr (>= 1.8.3),
-  dplyr (>= 0.4.3),
-  lubridate (>= 1.5.0),
-  devtools (>= 1.10.0)
+    plyr (>= 1.8.3),
+    dplyr (>= 0.4.3),
+    lubridate (>= 1.5.0),
+    devtools (>= 1.10.0)
 Suggests:
-  testthat
+    testthat
 License: LGPL
 LazyData: TRUE
+RoxygenNote: 5.0.1

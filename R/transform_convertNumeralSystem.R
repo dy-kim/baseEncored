@@ -57,6 +57,7 @@ bcInterface <- function(code) {
   return(result)
 }
 
+#' @export
 convertBase <-
   Vectorize(FUN = convertBaseCore,
             vectorize.args = 'input_value')
@@ -64,6 +65,7 @@ convertBase <-
 ######################
 #  Applied Functions
 ######################
+#' @export
 convertHex2Dec <- function(hexa_value) {
   result <-
     convertBase(
@@ -75,6 +77,7 @@ convertHex2Dec <- function(hexa_value) {
   return(result)
 }
 
+#' @export
 convertDec2Hex <- function(dec_value) {
   dec.val <- assureNumeric(dec_value)
   
@@ -93,6 +96,7 @@ convertDec2Hex <- function(dec_value) {
   return(result)
 }
 
+#' @export
 convertDec2Bin <- function(dec_value) {
   dec.val <- assureNumeric(dec_value)
   
@@ -111,6 +115,7 @@ convertDec2Bin <- function(dec_value) {
   return(result)
 }
 
+#' @export
 convertBin2Dec <- function(bin_value) {
   bin.val <- assureNumeric(bin_value)
   

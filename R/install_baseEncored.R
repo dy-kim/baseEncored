@@ -1,3 +1,4 @@
+#' @export
 installBaseEncored <- 
   function(bleeding_edge = FALSE) {
     org <- 'EncoredTechR'
