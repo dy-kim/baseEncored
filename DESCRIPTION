@@ -3,11 +3,13 @@ Type: Package
 Title: Base R packages for Encored Technologies
 Version: 0.1.8
 Date: 2016-05-03
-Authors@R: person(given  = "Dae Young", family = "Kim",
-         role   = c("aut", "cre"),
-         email  = "dykim22@encoredtech.com")
+Authors@R: 
+    person(given  = "Dae Young", family = "Kim",
+           role   = c("aut", "cre"),
+           email  = "dykim22@encoredtech.com")
 Maintainer: Dae Young Kim <dykim22@encoredtech.com>
-Description: Supplying basic functionalities required for the custom packages
+Description: 
+    Supplying basic functionalities required for the custom packages
     designed by Encored Technologies
 Depends:
     R (>= 3.2.0)
