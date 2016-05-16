@@ -12,7 +12,6 @@
 *.Rproj
 .Rproj.user/
 .Rproj.user/*
-.Rbuildignore
 
 # produced vignettes
 vignettes/*.html
