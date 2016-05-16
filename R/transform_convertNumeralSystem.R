@@ -1,9 +1,10 @@
 convertBaseCore <-
-  function(input_value,
-           input_base = getConvertibleBase(),
-           output_base = getConvertibleBase()) {
+  function(input_value, input_base, output_base) {
     stopifnot(chkSysName('Linux'))
     stopifnot(!missing(input_value))
+    
+    input_base  %<>% match.arg(choices = getConvertibleBase())
+    output_base %<>% match.arg(choices = getConvertibleBase())
     
     input_base  <- as.character(input_base)
     output_base <- as.character(output_base)

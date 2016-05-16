@@ -3,3 +3,6 @@
                   fields = "Version")
   packageStartupMessage("\nPackage ", pkgname, " (", ver, ") loaded.")
 }
+
+# To prevent the fault note while 'R CMD check'
+globalVariables("V1")

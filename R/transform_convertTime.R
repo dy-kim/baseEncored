@@ -25,7 +25,7 @@ convertHumanDate2UTC <- function(date_UTC) {
 convertHumanDateKST2timestampUTC <- function(date_KST) {
   convertHumanDate2KST(date_KST) %>%
     as.numeric() -> result
-    # floor()
+  # floor()
   return(result)
 }
 
@@ -72,12 +72,11 @@ convertJsonDateEncored <-
 timeSequenceEncored <-
   function(start_date,
            end_date,
-           time_unit = getTimeUnitSet(),
+           time_unit,
            num_seq = NULL,
            tz = TZ_DEFAULT) {
     stopifnot(tz %in% OlsonNames())
-    
-    time.unit  <- match.arg(time_unit)
+    time_unit %<>% match.arg(choices = getTimeUnitSet())
     
     start <- convertHumanDate2customTZ(start_date, tz)
     end   <- convertHumanDate2customTZ(end_date, tz)
@@ -87,7 +86,7 @@ timeSequenceEncored <-
       to   = end,
       by   = ifelse(
         test = is.null(num_seq),
-        yes  = convertTimeUnitAsSec(time.unit),
+        yes  = convertTimeUnitAsSec(time_unit),
         no   = as.numeric(difftime(end, start, tz, units = 'sec') / num_seq)
       )
     ) -> result
@@ -96,15 +95,17 @@ timeSequenceEncored <-
 
 #' @export
 countTimeSlot <- function(start_date, end_date, time_unit) {
+  time_unit %<>% match.arg(choices = getTimeUnitSet())
   timeSequenceEncored(start_date, end_date, time_unit) %>%
     length() -> result
   return(result)
 }
 
 #' @export
-convertTimeUnitAsSec <- function(time_unit = getTimeUnitSet()) {
+convertTimeUnitAsSec <- function(time_unit) {
+  time_unit %<>% match.arg(choices = getTimeUnitSet())
   switch(
-    match.arg(time_unit),
+    time_unit,
     '15min'   = 60 * 15,
     'hourly'  = 60 * 60,
     'daily'   = 60 * 60 * 24,
@@ -144,17 +145,16 @@ getQueryEndTimestamp <- function(end_date) {
 }
 
 #' @export
-convertTimeUnit2PeriodClass <-
-  function(time_unit = getTimeUnitSet()) {
-    time.unit <- match.arg(time_unit)
-    switch(
-      time.unit,
-      '15min'  = minutes(15),
-      'hourly' = hours(1),
-      'daily'  = days(1)
-    ) -> result
-    return(result)
-  }
+convertTimeUnit2PeriodClass <- function(time_unit) {
+  time_unit %<>% match.arg(choices = getTimeUnitSet())
+  switch(
+    time_unit,
+    '15min'  = minutes(15),
+    'hourly' = hours(1),
+    'daily'  = days(1)
+  ) -> result
+  return(result)
+}
 
 #' @export
 sysTimeEncored <- function() {
@@ -166,7 +166,6 @@ sysTimeEncored <- function() {
 #' @export
 isTimestampUnitSecond <- function(timestamp) {
   # '2286-11-21 02:46:39'까지가 nchar(timestamp) == 10
-  
   timestamp <- assureNumeric(timestamp)
   
   if (is.null(timestamp)) {

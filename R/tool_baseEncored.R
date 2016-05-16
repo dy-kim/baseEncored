@@ -42,8 +42,8 @@ divideByThousand <- function(x) {
 }
 
 #' @export
-asNumericAndRound <- function(tbl, digits = 3) {
-  suppressWarnings(return(as.numeric(round(tbl, digits))))
+asNumericAndRound <- function(data, digits = 3) {
+  suppressWarnings(return(as.numeric(round(data, digits))))
 }
 
 #' @export

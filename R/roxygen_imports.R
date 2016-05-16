@@ -1,3 +1,6 @@
+#' @importFrom utils write.table
+NULL
+
 #' @importFrom plyr mdply llply
 NULL
 
@@ -8,6 +11,9 @@ NULL
 NULL
 
 #' @importFrom devtools install_github
+NULL
+
+#' @importFrom magrittr %<>%
 NULL
 
 #' @import dplyr

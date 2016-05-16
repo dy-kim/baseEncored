@@ -62,7 +62,6 @@ runRemoteScript <- function(result_fileName,
     } else {
       cmd.ssh <-
         remoteRunWrapper(cmd.run, user_id, passwd, IP_address, port)
-      stopifnot(chkConnectionDataServer(IP_address, port))
     }
     cat(msg_priorRun)
     if (DEBUG)
