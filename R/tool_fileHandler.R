@@ -13,12 +13,12 @@ chkLocalFileExistence_leapOver <-
   function(dir, result_fileName, file_extension) {
     file.name.df <- data.frame(result_fileName  = result_fileName,
                                stringsAsFactors = FALSE)
-
+    
     exist.logi <- mdply(.data = file.name.df,
                         .fun  = chkLocalFileExistence,
                         dir   = dir) %>%
       rename(file_exists = V1)
-
+    
     return(exist.logi)
   }
 
