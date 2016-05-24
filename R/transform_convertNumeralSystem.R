@@ -1,18 +1,14 @@
+#' @export
 convertBaseCore <-
   function(input_value, input_base, output_base) {
     stopifnot(chkSysName('Linux'))
     stopifnot(!missing(input_value))
     
-    input_base  %<>% match.arg(choices = getConvertibleBase())
-    output_base %<>% match.arg(choices = getConvertibleBase())
-    
-    input_base  <- as.character(input_base)
-    output_base <- as.character(output_base)
-    input.base  <- match.arg(input_base)
-    output.base <- match.arg(output_base)
+    input_base  %<>% as.character() %>% match.arg(choices = getConvertibleBase())
+    output_base %<>% as.character() %>% match.arg(choices = getConvertibleBase())
     
     input.val <- ifelse(
-      test = input.base == '16',
+      test = input_base == '16',
       yes = toupper(input_value),
       no = assureNumeric(input_value)
     )
@@ -22,11 +18,11 @@ convertBaseCore <-
       return(NULL)
     }
     
-    getBcCodeConvertBase(input.val, input.base, output.base) %>%
+    getBcCodeConvertBase(input.val, input_base, output_base) %>%
       bcInterface() -> result
     
     result <-
-      ifelse(test = output.base == '10',
+      ifelse(test = output_base == '10',
              yes = asNumericFullSignificantFigure(result),
              no = result)
     return(result)
