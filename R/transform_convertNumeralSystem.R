@@ -29,14 +29,20 @@ convertBaseCore <-
   }
 
 getBcCodeConvertBase <- function(val, ibase, obase) {
-  if (ibase == 2 & obase == 10)
+  if (ibase == 2 & obase == 2)
+    obase <- 10
+  
+  else if (ibase == 2 & obase == 10)
     obase <- 1010
   
-  if (ibase == 2 & obase == 16)
+  else if (ibase == 2 & obase == 16)
     obase <- 10000
   
-  if (ibase == 16 & obase == 10)
+  else if (ibase == 16 & obase == 10)
     obase <- 'A'
+  
+  else if (ibase == 16 & obase == 16)
+    obase <- '10'
   
   paste(
     paste0('ibase=', formatNonSci(ibase)),
