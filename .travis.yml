@@ -1,7 +1,9 @@
 language: r
-sudo: true
+sudo: false
 cache: packages
 
 warnings_are_errors: false
-apt_packages:
-	bc
+addons:
+  apt:
+    packages:
+	- bc
