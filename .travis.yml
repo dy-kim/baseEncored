@@ -3,7 +3,5 @@ sudo: false
 cache: packages
 
 warnings_are_errors: false
-addons:
-  apt:
-    packages:
-	- bc
+apt_packages:
+  - bc
