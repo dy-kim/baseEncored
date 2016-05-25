@@ -8,8 +8,10 @@
 # Example code in package build process
 *-Ex.R
 
-# RStudio files
+# RStudio file
+*.Rproj
 .Rproj.user/
+.Rproj.user/*
 
 # produced vignettes
 vignettes/*.html
@@ -17,3 +19,9 @@ vignettes/*.pdf
 
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
+.Rproj.user
+
+# Apple Related
+.Apple*
+*/.Apple*
+.DS_Store
