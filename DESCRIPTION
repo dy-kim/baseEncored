@@ -1,8 +1,8 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.1.10
-Date: 2016-05-24
+Version: 0.1.11
+Date: 2016-06-03
 Authors@R: 
     person(given  = "Dae Young", family = "Kim",
            role   = c("aut", "cre"),
@@ -21,6 +21,13 @@ Imports:
     magrittr (>= 1.5.0)
 Suggests:
     testthat
+Remotes:
+  github::EncoredTechR/plyr@v1.8.3,
+  github::EncoredTechR/dplyr@v0.4.3,
+  github::EncoredTechR/lubridate@v1.5.6,
+  github::EncoredTechR/devtools@v1.11.1,
+  github::EncoredTechR/stringr@v1.0.0,
+  github::EncoredTechR/magrittr@v.1.5
 License: LGPL
 LazyData: TRUE
 RoxygenNote: 5.0.1
