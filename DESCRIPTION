@@ -21,12 +21,12 @@ Imports:
 Suggests:
   testthat
 Remotes:
-  github::cran/devtools@v1.11.1,
-  github::cran/dplyr@v0.5.0,
-  github::cran/lubridate@v1.5.6,
-  github::cran/magrittr@v.1.5,
-  github::cran/plyr@v1.8.3,
-  github::cran/stringr@v1.0.0
+  github::cran/devtools@1.11.1,
+  github::cran/dplyr@0.5.0,
+  github::cran/lubridate@1.5.6,
+  github::cran/magrittr@1.5,
+  github::cran/plyr@1.8.3,
+  github::cran/stringr@1.0.0
 License: LGPL
 LazyData: TRUE
 RoxygenNote: 5.0.1
