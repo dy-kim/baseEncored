@@ -1,33 +1,32 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.1.11
-Date: 2016-06-03
+Version: 0.1.12
 Authors@R: 
-    person(given  = "Dae Young", family = "Kim",
-           role   = c("aut", "cre"),
-           email  = "dykim22@encoredtech.com")
-Maintainer: Dae Young Kim <dykim22@encoredtech.com>
+  person(given = "Daeyoung", family = "Kim",
+         role = c("aut", "cre"),
+         email = "dykim22@encoredtech.com")
+Maintainer: Daeyoung Kim <dykim22@encoredtech.com>
 Description: 
-    Supplying basic functionalities required for the custom packages designed by Encored Technologies.
+  Supplying basic functionalities required for the custom packages designed by Encored Technologies.
 Depends:
-    R (>= 3.2.0)
+  R (>= 3.3.0)
 Imports:
-    plyr (>= 1.8.3),
-    dplyr (>= 0.4.3),
-    lubridate (>= 1.5.0),
-    devtools (>= 1.10.0),
-    stringr (>= 1.0.0),
-    magrittr (>= 1.5.0)
+  devtools (>= 1.10.0),
+  dplyr (>= 0.5.0),
+  lubridate (>= 1.5.0),
+  magrittr (>= 1.5.0),
+  plyr (>= 1.8.3),
+  stringr (>= 1.0.0)
 Suggests:
-    testthat
+  testthat
 Remotes:
-  github::EncoredTechR/plyr@v1.8.3,
-  github::EncoredTechR/dplyr@v0.4.3,
-  github::EncoredTechR/lubridate@v1.5.6,
-  github::EncoredTechR/devtools@v1.11.1,
-  github::EncoredTechR/stringr@v1.0.0,
-  github::EncoredTechR/magrittr@v.1.5
+  github::cran/devtools@v1.11.1,
+  github::cran/dplyr@v0.5.0,
+  github::cran/lubridate@v1.5.6,
+  github::cran/magrittr@v.1.5,
+  github::cran/plyr@v1.8.3,
+  github::cran/stringr@v1.0.0
 License: LGPL
 LazyData: TRUE
 RoxygenNote: 5.0.1
