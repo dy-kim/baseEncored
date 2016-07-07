@@ -7,5 +7,5 @@ installBaseEncored <-
       org <- 'dykim22'
     
     repo <- paste0(org, '/baseEncored')
-    install_github(repo)
+    devtools::install_github(repo)
 }
