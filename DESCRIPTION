@@ -1,17 +1,16 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.1.12
-Authors@R: 
-  person(given = "Daeyoung", family = "Kim",
-         role = c("aut", "cre"),
-         email = "dykim22@encoredtech.com")
+Version: 0.2.0
+Authors@R: person("Daeyoung", "Kim", email = "dykim22@encoredtech.com", role = c("aut", "cre"))
 Maintainer: Daeyoung Kim <dykim22@encoredtech.com>
 Description: 
   Supplying basic functionalities required for the custom packages designed by Encored Technologies.
 Depends:
-  R (>= 3.3.0)
+  R (>= 3.2.0)
 Imports:
+  Rcpp (>= 0.12.5),
+  bcR (>= 0.1.1),
   devtools (>= 1.10.0),
   dplyr (>= 0.5.0),
   lubridate (>= 1.5.0),
@@ -21,12 +20,10 @@ Imports:
 Suggests:
   testthat
 Remotes:
-  github::cran/devtools@1.11.1,
-  github::cran/dplyr@0.5.0,
-  github::cran/lubridate@1.5.6,
-  github::cran/magrittr@1.5,
-  github::cran/plyr@1.8.3,
-  github::cran/stringr@1.0.0
+  github::dy-kim/bcR
 License: LGPL
 LazyData: TRUE
 RoxygenNote: 5.0.1
+LinkingTo: 
+  Rcpp
+

@@ -1,5 +1,5 @@
 #' @export
-isZeroLength <- function(obj) { 
+isZeroLength <- function(obj) {
   return(length(obj) == 0L)
 }
 
@@ -7,7 +7,7 @@ isZeroLength <- function(obj) {
 isZeroRow <- function(obj_df) {
   if (is.data.frame(obj_df))
     return(nrow(obj_df) == 0L)
-  else 
+  else
     stop("ERROR: class of \"obj_df\" must be a data.frame.")
 }
 

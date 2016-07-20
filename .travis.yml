@@ -3,6 +3,3 @@ sudo: false
 cache: packages
 
 warnings_are_errors: false
-addons:
-  apt_packages:
-  - bc

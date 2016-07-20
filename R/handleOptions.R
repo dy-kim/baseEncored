@@ -10,7 +10,6 @@ expandDigit <- function(value) {
     digit.to <- digit.to - 1
   if (digit.to > 22)
     digit.to <- 22
-  
   options(digits = digit.to)
 }
 
@@ -26,5 +25,5 @@ setTimeDigit <- function(digits) {
 
 #' @export
 chkSysName <- function(sys_name) {
-  return(Sys.info()['sysname'] == sys_name)
+  return(Sys.info()["sysname"] == sys_name)
 }

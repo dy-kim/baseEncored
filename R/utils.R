@@ -1,11 +1,23 @@
 #' @export
+installBaseEncored <-
+  function(bleeding_edge = FALSE) {
+    org <- "EncoredTechR"
+    if (bleeding_edge)
+      org <- "dy-kim"
+    # nolint start
+    repo <- paste0(org, "/baseEncored")
+    # nolint end
+    devtools::install_github(repo)
+  }
+
+#' @export
 grepMulti <- function(pattern, x) {
-  if (any('*' %in% pattern)) {
+  if (any("*" %in% pattern)) {
     grep(pattern, x) -> result
     return(result)
   } else {
-    paste0('^', pattern, '$') %>%
-      llply(.fun = grep, x = x, perl = TRUE) %>%
+    paste0("^", pattern, "$") %>%
+      plyr::llply(.fun = grep, x = x, perl = TRUE) %>%
       unlist() -> result
     return(result)
   }
@@ -13,9 +25,9 @@ grepMulti <- function(pattern, x) {
 
 #' @export
 whichMulti <- function(pattern, x) {
-  if (pattern == '*') {
+  if (pattern == "*") {
     pattern %>%
-      llply(
+      plyr::llply(
         .fun = function(pattern, x) {
           seq(1, length(x))
         },
@@ -24,16 +36,15 @@ whichMulti <- function(pattern, x) {
       unlist() -> result
     return(result)
   }
-  
   pattern %>%
-    llply(
+    plyr::llply(
       .fun = function(pattern, x) {
         which(pattern == x)
       },
       x = x
     ) %>%
     unlist() -> result
-    return(result)
+  return(result)
 }
 
 #' @export
@@ -70,4 +81,21 @@ assureNumeric <- function(val) {
 #' @export
 formatNonSci <- function(value) {
   return(format(value, scientific = FALSE))
+}
+
+#' Form Row Medians
+#'
+#' @param x an array of two dimensions,
+#' containing numeric, integer values, or a numeric data frame.
+#'
+#' Form row medians for numeric arrays (or data frames).
+#'
+#' @export
+rowMedian <- function(x) {
+  stopifnot(is.matrix(x) | is.data.frame(x))
+  matrixAsVector <- as.vector(t(x))
+  result <- vectorizedMedian(matrixAsVector, ncol(x))
+  rm(matrixAsVector)
+  gc()
+  return(result)
 }
