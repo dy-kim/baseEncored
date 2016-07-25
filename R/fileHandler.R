@@ -13,10 +13,13 @@ chkLocalFileExistence_leapOver <-
   function(dir, result_fileName, file_extension) {
     fileNameDf <- data.frame(result_fileName  = result_fileName,
                              stringsAsFactors = FALSE)
-    result <- plyr::mdply(.data = fileNameDf,
-                          .fun  = chkLocalFileExistence,
-                          dir   = dir) %>%
+
+    result <-
+      plyr::mdply(.data = fileNameDf,
+                  .fun  = chkLocalFileExistence,
+                  dir   = dir) %>%
       rename(file_exists = V1)
+
     return(result)
   }
 
@@ -27,14 +30,17 @@ listFilesVectorized <- function(path, pattern, ...) {
            list.files(pattern = x, path, ...)
          }) %>%
     unlist() -> result
+
   return(result)
 }
 
 #' @export
 makeFileNamePattern <- function(file_name, file_extension) {
   pattern <- paste0(file_name, ".*")
+
   if (!missing(file_extension))
     pattern <- paste0(pattern, "\\", file_extension, "$")
+
   return(pattern)
 }
 

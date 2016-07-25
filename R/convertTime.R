@@ -56,12 +56,14 @@ convertTimezone <- function(dateTimeClass, TZ_to) {
 convertJsonDateEncored <-
   function(date_UTC, target_TZ = TZ_DEFAULT) {
     stopifnot(target_TZ %in% OlsonNames())
+
     humanDateUtc <-
       as.character(date_UTC) %>%
       stringr::str_replace(pattern = "T", replacement = " ") %>%
       stringr::str_replace(pattern = "Z", replacement = "")
     convertHumanDate2UTC(humanDateUtc) %>%
       convertTimezone(TZ_to = target_TZ) -> result
+
     return(result)
   }
 
@@ -72,29 +74,35 @@ timeSequenceEncored <- function(start_date,
                                 num_seq = NULL,
                                 tz = TZ_DEFAULT) {
   stopifnot(tz %in% OlsonNames())
+
   time_unit %<>% match.arg(choices = getTimeUnitSet())
   start <- convertHumanDate2customTZ(start_date, tz)
   end <- convertHumanDate2customTZ(end_date, tz)
+
   ifelse(
     test = is.null(num_seq),
     yes  = convertTimeUnitAsSec(time_unit),
     no   = as.numeric(difftime(end, start, tz, units = "sec") / num_seq)
   ) %>%
     seq(from = start, to = end, by = .) -> result
+
   return(result)
 }
 
 #' @export
 countTimeSlot <- function(start_date, end_date, time_unit) {
   time_unit %<>% match.arg(choices = getTimeUnitSet())
+
   timeSequenceEncored(start_date, end_date, time_unit) %>%
     length() -> result
+
   return(result)
 }
 
 #' @export
 convertTimeUnitAsSec <- function(time_unit) {
   time_unit %<>% match.arg(choices = getTimeUnitSet())
+
   switch(
     time_unit,
     "15min"   = 60 * 15,
@@ -102,6 +110,7 @@ convertTimeUnitAsSec <- function(time_unit) {
     "daily"   = 60 * 60 * 24,
     "monthly" = 60 * 60 * 24 * 30
   ) -> result
+
   return(result)
 }
 
@@ -135,12 +144,14 @@ getQueryEndTimestamp <- function(end_date) {
 #' @export
 convertTimeUnit2PeriodClass <- function(time_unit) {
   time_unit %<>% match.arg(choices = getTimeUnitSet())
+
   switch(
     time_unit,
     "15min"  = minutes(15),
     "hourly" = hours(1),
     "daily"  = days(1)
   ) -> result
+
   return(result)
 }
 
@@ -155,16 +166,20 @@ sysTimeEncored <- function() {
 isTimestampUnitSecond <- function(timestamp) {
   # '2286-11-21 02:46:39'까지가 nchar(timestamp) == 10
   timestamp <- assureNumeric(timestamp)
+
   if (is.null(timestamp)) {
     warning("Please check that the input for timestamp is proper type. Return NULL.")
     return(NULL)
   }
+
   dateMax <- "9999-12-31"
   timsestampSecondUnitMax <-
     dateMax %>%
     convertHumanDateKST2timestampUTC() %>%
     convertTimestampUTC2HumandateKST()
+
   isUnitSecond <-
     convertTimestampUTC2HumandateKST(max(timestamp)) < timsestampSecondUnitMax
+
   return(isUnitSecond)
 }

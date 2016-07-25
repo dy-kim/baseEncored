@@ -5,9 +5,11 @@ chkRemoteFileExistence <- function(remote_file,
                                    IP_address,
                                    port) {
   cmd <- paste("test -e", remote_file, "&& echo TRUE || echo FALSE")
+
   remoteRunWrapper(cmd, user, passwd, IP_address, port) %>%
     system(intern = TRUE) %>%
     as.logical() -> result
+
   return(result)
 }
 
@@ -25,6 +27,7 @@ remoteRunWrapper <- function(cmd, user, passwd, IP_address, port) {
     paste0(user, "@", IP_address),
     paste0("'", cmd, "'")
   )
+
   sshpassWrapper(cmd.ssh, passwd) -> result
   return(result)
 }
@@ -48,12 +51,13 @@ runRemoteScript <- function(result_fileName,
                             port = 22,
                             DEBUG = FALSE) {
   if (!chkLocalFileExistence(local_dst_dir, result_fileName)) {
-    cmdRun     <- paste("cd",
-                        script_dir,
-                        "&&",
-                        command_runScript,
-                        "&&",
-                        command_postRunScript)
+    cmdRun <- paste("cd",
+                    script_dir,
+                    "&&",
+                    command_runScript,
+                    "&&",
+                    command_postRunScript)
+
     if (is.null(user_id) & is.null(IP_address)) {
       cmdSsh <- cmdRun
     } else {
@@ -61,8 +65,10 @@ runRemoteScript <- function(result_fileName,
         remoteRunWrapper(cmdRun, user_id, passwd, IP_address, port)
     }
     cat(msg_priorRun)
+
     if (DEBUG)
       print(cmdSsh)
+
     system(command = cmdSsh)
   }
   return(TRUE)
@@ -78,6 +84,7 @@ scpFileToRemote <- function(file_path,
   cmd.scp <- scpWrapper(port,
                         src = file_path,
                         dst = paste0(user_id, "@", IP_address, ":", remote_dst))
+
   sshpassWrapper(cmd.scp, passwd) %>%
     system()
 }

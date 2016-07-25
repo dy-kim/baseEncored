@@ -1,14 +1,13 @@
 #' @export
-installBaseEncored <-
-  function(bleeding_edge = FALSE) {
-    org <- "EncoredTechR"
-    if (bleeding_edge)
-      org <- "dy-kim"
-    # nolint start
-    repo <- paste0(org, "/baseEncored")
-    # nolint end
-    devtools::install_github(repo)
-  }
+installBaseEncored <- function(bleeding_edge = FALSE) {
+  org <- "EncoredTechR"
+
+  if (bleeding_edge)
+    org <- "dy-kim"
+
+  repo <- paste0(org, "/", "baseEncored")
+  devtools::install_github(repo)
+}
 
 #' @export
 grepMulti <- function(pattern, x) {
