@@ -1,7 +1,7 @@
-#### [Title]
-- [Issue #111] bug fix about email authentication
+Prefix title with [Fix #issue-number] followed by concise description.
 
-#### [Issue]
+#### [Fix #] 
+(Or [Issue #] if merging this PR shouldn't close the issue)
 - Why is this change necessary? Please describe the issue and its context, and attach the link to the issue such as
 https://github.com/EncoredTech/api/issues/749
 
@@ -12,6 +12,9 @@ https://github.com/EncoredTech/api/issues/749
 ###### (Automated Tests)
 - testthat (0 error/warning)
 - lintr (0 error/warning)
+
+###### (Manual Tests)
+- 
 
 ##### [Post-Actions]
 - If it were a feature, do you have any TODO which is worth creating an issue? Please list them here.
