@@ -18,7 +18,7 @@ chkLocalFileExistence_leapOver <-
       plyr::mdply(.data = fileNameDf,
                   .fun  = chkLocalFileExistence,
                   dir   = dir) %>%
-      rename(file_exists = V1)
+      dplyr::rename(file_exists = V1)
 
     return(result)
   }

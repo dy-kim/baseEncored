@@ -147,9 +147,9 @@ convertTimeUnit2PeriodClass <- function(time_unit) {
 
   switch(
     time_unit,
-    "15min"  = minutes(15),
-    "hourly" = hours(1),
-    "daily"  = days(1)
+    "15min"  = lubridate::minutes(15),
+    "hourly" = lubridate::hours(1),
+    "daily"  = lubridate::days(1)
   ) -> result
 
   return(result)

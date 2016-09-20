@@ -9,23 +9,55 @@ PowerUsage <- function(obj, time_unit, power_unit) {
   }
 
   class(obj) <- c("data.frame", "PowerUsage")
-  attr(obj, "unit") <- power_unit
-  attr(obj, "time") <- time_unit
+  obj %<>% setPowerUnit.PowerUsage(power_unit)
+  obj %<>% setTimeUnit.PowerUsage(time_unit)
+
   return(obj)
 }
 
 #' @export
 updatePower.PowerUsage <- function(obj, power_unit) {
-  power_unit %<>% match.arg(choices = getPowerUnitSet())
+  warning("Replace this function to 'updatePowerUnit.PowerUsage'!")
+  return(updatePowerUnit.PowerUsage(obj, power_unit))
+}
+
+#' @export
+updatePowerUnit.PowerUsage <- function(obj, powerUnit) {
+  powerUnit %<>% match.arg(choices = getPowerUnitSet())
 
   if (!("PowerUsage" %in% class(obj)))
     stop("NOTICE ME: only PowerUsage object is allowed for updating.")
 
-  if (attr(obj, "unit") != power_unit) {
+  timeUnitOriginal <- getTimeUnit.PowerUsage(obj)
+  powerUnitOriginal <- getPowerUnit.PowerUsage(obj)
+  if (powerUnitOriginal != powerUnit) {
     obj$usage <- convertPowerUnit(usage = obj$usage,
-                                  from = attr(obj, "unit"),
-                                  to = power_unit)
-    attr(obj, "unit") <- power_unit
+                                  from = powerUnitOriginal,
+                                  to = powerUnit)
+    obj %<>% setPowerUnit.PowerUsage(powerUnit)
+    obj %<>% setTimeUnit.PowerUsage(timeUnitOriginal)
+  }
+  return(obj)
+}
+
+#' @export
+updateTimeUnit.PowerUsage <- function(obj, timeUnit) {
+  timeUnit %<>% match.arg(choices = getTimeUnitSet())
+
+  if (!("PowerUsage" %in% class(obj)))
+    stop("NOTICE ME: only PowerUsage object is allowed for updating.")
+
+  if (!lubridate::is.POSIXt(obj$date))
+    stop("Column 'date' must be a POSIXt class!")
+
+  stopifnot(isTimeUnitUpdatable(obj, timeUnit))
+
+  timeUnitOriginal <- getTimeUnit.PowerUsage(obj)
+  powerUnitOriginal <- getPowerUnit.PowerUsage(obj)
+  if (timeUnitOriginal != timeUnit) {
+    obj %<>% convertTimeUnit(to = timeUnit)
+    obj %<>% setPowerUnit.PowerUsage(powerUnitOriginal)
+    obj %<>% setTimeUnit.PowerUsage(timeUnit)
   }
   return(obj)
 }
@@ -50,6 +82,73 @@ getRelativeCoeff_mW_Base <- function(power_unit) {
   return(result)
 }
 
-updateTime.PowerUsage <- function(obj, time_unit = c()) {
-  # TO DO
+isTimeUnitUpdatable <- function(obj, timeUnit) {
+  timeUnitOriginal <- getTimeUnit.PowerUsage(obj)
+  timeUnitUpdated <- getConvertibleTimeUnit(timeUnitOriginal)
+  return(timeUnit %in% timeUnitUpdated)
+}
+
+getConvertibleTimeUnit <- function(timeUnit) {
+  timeUnit  %<>% match.arg(choices = getTimeUnitSet())
+
+  convertibleTimeUnit <-
+    switch(
+      timeUnit,
+      "15min" = c("hourly", "daily", "monthly"),
+      "hourly" = c("daily", "monthly"),
+      "daily" = c("monthly")
+    )
+  return(convertibleTimeUnit)
+}
+
+convertTimeUnit <- function(obj, to) {
+  obj %<>% updateDateTimeColumn(to)
+
+  objDt <- data.table::as.data.table(obj)
+  keyToGroup <- getGroupKeyToConvertTimeUnit(obj)
+  # nolint start
+  objDt <- objDt[,
+                 .(usage = sum(usage), count = .N),
+                 by = keyToGroup]
+  # TODO: Make if-clause as a function
+  if (to == "hourly") {
+    objDt <- objDt[count == NUM_OF_15MIN_IN_AN_HOUR]
+  }
+  objDt <- objDt[, count := NULL]
+  # nolint end
+
+  return(objDt)
+}
+
+updateDateTimeColumn <- function(obj, to) {
+  timeUnitLubridate <-
+    switch(to,
+           hourly = "hour",
+           daily = "day",
+           monthly = "month")
+
+  obj$date %<>% lubridate::floor_date(timeUnitLubridate)
+  return(obj)
+}
+
+getGroupKeyToConvertTimeUnit <- function(obj) {
+  return(names(obj) %w/o% c("usage"))
+}
+
+getTimeUnit.PowerUsage <- function(obj) {
+  attr(obj, "time")
+}
+
+getPowerUnit.PowerUsage <- function(obj) {
+  return(attr(obj, "unit"))
+}
+
+setTimeUnit.PowerUsage <- function(obj, x) {
+  attr(obj, "time") <- x
+  return(obj)
+}
+
+setPowerUnit.PowerUsage <- function(obj, x) {
+  attr(obj, "unit") <- x
+  return(obj)
 }

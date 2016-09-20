@@ -98,3 +98,24 @@ rowMedian <- function(x) {
   gc()
   return(result)
 }
+
+getExtDataPath <- function(filename) {
+  system.file("extdata",
+              filename,
+              package = "baseEncored")
+}
+
+# nolint start
+# dumpUsageForTest <- function(siteId,
+#                              timeUnit,
+#                              powerUnit) {
+#   JediETL::dumpFeederUsageEncoredAPI(siteId,
+#                                      timeUnit,
+#                                      powerUnit,
+#                                      "2016-09-01 00:00",
+#                                      "2016-09-01 03:00") %>%
+#     filter(local_feeder_id == 0) %>%
+#     select(site_id, device_id, date, usage) %>%
+#     PowerUsage(timeUnit, powerUnit)
+# }
+# nolint end
