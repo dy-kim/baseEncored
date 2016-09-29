@@ -123,21 +123,21 @@ roundTime <- function(time_obj, time_unit, round_func) {
 }
 
 #' @export
-getQueryTimestamp <- function(date_KST) {
-  (convertHumanDateKST2timestampUTC(date_KST) * 1000) %>%
-    formatNonSci() -> result
+getQueryTimestamp <- function(dateTime) {
+  timestamp <- as.numeric(dateTime)
+  (timestamp * 1000) %>% formatNonSci() -> result
   return(result)
 }
 
 #' @export
-getQueryStartTimestamp <- function(start_date) {
-  paste0("start=", getQueryTimestamp(start_date)) -> result
+getQueryStartTimestamp <- function(startDateTime) {
+  paste0("start=", getQueryTimestamp(startDateTime)) -> result
   return(result)
 }
 
 #' @export
-getQueryEndTimestamp <- function(end_date) {
-  paste0("end=", getQueryTimestamp(end_date)) -> result
+getQueryEndTimestamp <- function(endDateTime) {
+  paste0("end=", getQueryTimestamp(endDateTime)) -> result
   return(result)
 }
 
