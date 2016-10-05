@@ -9,6 +9,31 @@ installBaseEncored <- function(bleeding_edge = FALSE) {
   devtools::install_github(repo)
 }
 
+#' Multiple pattern matching.
+#'
+#' \code{grepMulti} matches \code{pattern}, in this case a user name(s)/appliance(s),
+#' to a character vector \code{x} of all users/appliances, respectively.
+#'
+#' @param pattern a character string to be matched in the given character vector.
+#' @param x a character vector to be matched to.
+#'
+#' @return \code{grepMulti} returns a vector of the indices of \code{x} that
+#' matched with the elements of \code{pattern}.
+#'
+#' @seealso
+#' \code{\link{grepMetaData}}: searches meta data given a targeted user and/or
+#' appliance and returns the selected row of data. \cr
+#' \code{\link{searchMetaData}}
+#'
+#' @examples
+#' user.name <- c('David')
+#' appliance.name <- c('Fridge')
+#' user.list <- c('Kanye', 'David', 'John')
+#' appliance.list <- c('AirWasher', 'Fridge', 'MicroOven', 'Fridge')
+#'
+#' grepMulti(user.name, user.list) # 2
+#' grepMulti(appliance.name, appliance.list) # 2 4
+#'
 #' @export
 grepMulti <- function(pattern, x) {
   if (any("*" %in% pattern)) {
