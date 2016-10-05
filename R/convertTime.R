@@ -76,17 +76,44 @@ timeSequenceEncored <- function(start_date,
   stopifnot(tz %in% OlsonNames())
 
   time_unit %<>% match.arg(choices = getTimeUnitSet())
-  start <- convertHumanDate2customTZ(start_date, tz)
-  end <- convertHumanDate2customTZ(end_date, tz)
+  startDateTime <- convertHumanDate2customTZ(start_date, tz)
+  endDateTime <- convertHumanDate2customTZ(end_date, tz)
 
-  ifelse(
-    test = is.null(num_seq),
-    yes  = convertTimeUnitAsSec(time_unit),
-    no   = as.numeric(difftime(end, start, tz, units = "sec") / num_seq)
-  ) %>%
-    seq(from = start, to = end, by = .) -> result
+  if (is.null(num_seq)) {
+    by <- convertTimeUnitAsSec(time_unit)
+  } else {
+    by <-
+      getIncrementOfTheTimeSequenceUsingNumSeq(startDateTime,
+                                               endDateTime,
+                                               time_unit,
+                                               tz,
+                                               num_seq)
+  }
 
+  seq(from = startDateTime, to = endDateTime, by = by) -> result
   return(result)
+}
+
+getIncrementOfTheTimeSequenceUsingNumSeq <- function(startDateTime,
+                                                     endDateTime,
+                                                     time_unit,
+                                                     tz,
+                                                     num_seq) {
+  timeUnitAsSec <- convertTimeUnitAsSec(time_unit)
+  periodAsSec <-
+    difftime(endDateTime, startDateTime, tz, units = "sec") %>%
+    as.numeric()
+
+  if (num_seq > periodAsSec / timeUnitAsSec) {
+    warning("Invalid 'num_seq'! Set the increment as 'time_unit.")
+    return(timeUnitAsSec)
+  }
+
+  incrementRaw <- periodAsSec / num_seq
+  incrementIndexByTimeUnit <- floor(incrementRaw / timeUnitAsSec)
+  increment <- incrementIndexByTimeUnit * timeUnitAsSec
+
+  return(increment)
 }
 
 #' @export
@@ -96,7 +123,7 @@ countTimeSlot <- function(start_date, end_date, time_unit) {
   timeSequenceEncored(start_date, end_date, time_unit) %>%
     length() -> result
 
-  return(result)
+  return(result - 1)
 }
 
 #' @export
