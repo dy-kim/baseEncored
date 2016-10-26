@@ -1,16 +1,19 @@
 context("Test updateTimeUnit.PowerUsage")
 
 suppressPackageStartupMessages(library(dplyr))
+pkgName <- getPackageName()
 
 test_that(desc = "Convert human date to time class with selected timezone",
           code = {
             usage15min <-
-              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_15min.rds") %>%
+              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_15min.rds",
+                                               pkgName) %>%
               readRDS()
             usageHourlyUpdated <-
               updateTimeUnit.PowerUsage(usage15min, "hourly")
             usageHourly <-
-              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_hourly.rds") %>%
+              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_hourly.rds",
+                                               pkgName) %>%
               readRDS()
 
             getTimeUnit.PowerUsage(usageHourlyUpdated) %>%

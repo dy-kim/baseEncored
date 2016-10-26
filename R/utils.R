@@ -117,34 +117,32 @@ rowMedian <- function(x) {
 }
 
 #' @export
-getExtDataFilePathOfInstalledPkg <- function(filename) {
-  getExtDataFolderPathOfInstalledPkg() %>%
-    getFilePathFromGivenExtDataFolderPath(filename)
-}
+getExtDataFilePathOfInstalledPkg <- function(filename, pkgName) {
+    getExtDataFolderPathOfInstalledPkg(pkgName) %>%
+      getFilePathFromGivenExtDataFolderPath(filename)
+  }
 
 #' @export
-getExtDataFolderPathOfInstalledPkg <- function() {
-  pkgName <- getPackageName()
-  if (isPackageAttached(pkgName)) {
-    unloadNamespace(pkgName)
-    path <- system.file("extdata", package = pkgName)
-    suppressPackageStartupMessages(require(
-      package = pkgName,
-      quietly = TRUE,
-      character.only = TRUE
-    ))
-  } else {
-    path <- system.file("extdata", package = pkgName)
+getExtDataFolderPathOfInstalledPkg <- function(pkgName) {
+    if (isPackageAttached(pkgName)) {
+      unloadNamespace(pkgName)
+      path <- system.file("extdata", package = pkgName)
+      suppressPackageStartupMessages(require(
+        package = pkgName,
+        quietly = TRUE,
+        character.only = TRUE
+      ))
+    } else {
+      path <- system.file("extdata", package = pkgName)
+    }
+    return(path)
   }
-  return(path)
-}
 
 isPackageAttached <- function(pkgName) {
   paste0("package:", pkgName) %in% search()
 }
 
-getFilePathFromGivenExtDataFolderPath <-
-  function(folderPath, filename) {
+getFilePathFromGivenExtDataFolderPath <- function(folderPath, filename) {
     path <- file.path(folderPath, filename)
 
     if (file.exists(path)) {
@@ -156,19 +154,24 @@ getFilePathFromGivenExtDataFolderPath <-
   }
 
 #' @export
-getExtDataFilePathOfDevelopingPkg <- function(filename) {
-  getExtDataFolderPathOfDevelopingPkg() %>%
-    getFilePathFromGivenExtDataFolderPath(filename)
-}
+getExtDataFilePathOfDevelopingPkg <- function(filename, pkgName) {
+    getExtDataFolderPathOfDevelopingPkg(pkgName) %>%
+      getFilePathFromGivenExtDataFolderPath(filename)
+  }
 
 #' @export
-getExtDataFolderPathOfDevelopingPkg <- function() {
-  pkgName <- getPackageName()
-  if (isWdPkgProj(pkgName)) {
-    path <- file.path(getwd(), "inst", "extdata")
-    return(path)
+getExtDataFolderPathOfDevelopingPkg <- function(pkgName) {
+    if (isWdPkgProj(pkgName)) {
+      path <- file.path(getwd(), "inst", "extdata")
+      return(path)
+    } else {
+      paste("Current working directory does not include a",
+            pkgName,
+            "R package project.") %>%
+        FORCE_WARN()
+      return("")
+    }
   }
-}
 
 isWdPkgProj <- function(pkgName) {
   return(hasWdPkgDescription(pkgName) & hasWdRproj(pkgName))

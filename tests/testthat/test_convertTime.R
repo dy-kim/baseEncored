@@ -70,9 +70,7 @@ test_that("Count number of time slots in given period",
                 end_date = "2016-01-01 02:00",
                 time_unit = "hourly"
               ),
-              length(c(
-                "2016-01-01 00:00", "2016-01-01 01:00"
-              ))
+              length(c("2016-01-01 00:00", "2016-01-01 01:00"))
             )
           })
 

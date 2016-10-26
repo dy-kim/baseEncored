@@ -1,7 +1,8 @@
 context("Test timeSequenceEncored")
 
 testEnvFileName <- "testEnv_timeSequenceEncored.RData"
-testEnvFilePath <- getExtDataFilePathOfInstalledPkg(testEnvFileName)
+pkgName <- getPackageName()
+testEnvFilePath <- getExtDataFilePathOfInstalledPkg(testEnvFileName, pkgName)
 
 load(testEnvFilePath)
 
@@ -13,7 +14,7 @@ test_that(desc = "Test timeSequenceEncored",
             if (getStatusOfProducingTestAnswer(returnStatus = TRUE)) {
               answer <- testResult
               save(list = ls(),
-                   file = getExtDataFilePathOfDevelopingPkg(testEnvFileName))
+                   file = getExtDataFilePathOfDevelopingPkg(testEnvFileName, pkgName))
             }
 
             expect_equal(testResult, answer)
