@@ -3,36 +3,43 @@
 
 #' @export
 convertHumanDate2customTZ <- function(date, time_zone) {
-  stopifnot(time_zone %in% OlsonNames())
+  if (isNotInOlsonNames(time_zone)) {
+    FORCE_FATAL("'time_zone' is not a Olson name.")
+  }
+
   as.POSIXct(date, origin = TIME_ORIGIN, tz = time_zone) -> result
   return(result)
 }
 
+isNotInOlsonNames <- function(tz) {
+  return(!(tz %in% OlsonNames()))
+}
+
 #' @export
 convertHumanDate2KST <- function(date_KST) {
-  convertHumanDate2customTZ(date = date_KST,
-                            time_zone = "Asia/Seoul") -> result
+  convertHumanDate2customTZ(date = date_KST, time_zone = "Asia/Seoul") -> result
   return(result)
 }
 
 #' @export
 convertHumanDate2UTC <- function(date_UTC) {
-  convertHumanDate2customTZ(date = date_UTC,
-                            time_zone = "UTC") -> result
+  convertHumanDate2customTZ(date = date_UTC, time_zone = "UTC") -> result
   return(result)
 }
 
 #' @export
 convertHumanDateKST2timestampUTC <- function(date_KST) {
-  convertHumanDate2KST(date_KST) %>%
-    as.numeric() -> result
+  convertHumanDate2KST(date_KST) %>% as.numeric() -> result
   return(result)
 }
 
 #' @export
 convertTimestampUTC2HumandateCustomTZ <-
   function(timestamp_ms, time_zone) {
-    stopifnot(time_zone %in% OlsonNames())
+    if (isNotInOlsonNames(time_zone)) {
+      FORCE_FATAL("'time_zone' is not a Olson name.")
+    }
+
     convertHumanDate2customTZ(date = as.numeric(timestamp_ms) / 1000,
                               time_zone = time_zone) -> result
     return(result)
@@ -46,7 +53,10 @@ convertTimestampUTC2HumandateKST <- function(timestamp_ms) {
 
 #' @export
 convertTimezone <- function(dateTimeClass, TZ_to) {
-  stopifnot(TZ_to %in% OlsonNames())
+  if (isNotInOlsonNames(TZ_to)) {
+    FORCE_FATAL("'TZ_to' is not a Olson name.")
+  }
+
   format(x = dateTimeClass, tz = TZ_to) %>%
     convertHumanDate2customTZ(time_zone = TZ_to) -> result
   return(result)
@@ -55,12 +65,19 @@ convertTimezone <- function(dateTimeClass, TZ_to) {
 #' @export
 convertJsonDateEncored <-
   function(date_UTC, target_TZ = TZ_DEFAULT) {
-    stopifnot(target_TZ %in% OlsonNames())
+    if (isNotInOlsonNames(target_TZ)) {
+      FORCE_FATAL("'target_TZ' is not a Olson name.")
+    }
 
     humanDateUtc <-
       as.character(date_UTC) %>%
-      stringr::str_replace(pattern = "T", replacement = " ") %>%
-      stringr::str_replace(pattern = "Z", replacement = "")
+      stringr::str_replace(string = .,
+                           pattern = "T",
+                           replacement = " ") %>%
+      stringr::str_replace(string = .,
+                           pattern = "Z",
+                           replacement = "")
+
     convertHumanDate2UTC(humanDateUtc) %>%
       convertTimezone(TZ_to = target_TZ) -> result
 
@@ -73,7 +90,9 @@ timeSequenceEncored <- function(start_date,
                                 time_unit,
                                 num_seq = NULL,
                                 tz = TZ_DEFAULT) {
-  stopifnot(tz %in% OlsonNames())
+  if (isNotInOlsonNames(tz)) {
+    FORCE_FATAL("'tz' is not a Olson name.")
+  }
 
   time_unit %<>% match.arg(choices = getTimeUnitSet())
   startDateTime <- convertHumanDate2customTZ(start_date, tz)
@@ -90,8 +109,18 @@ timeSequenceEncored <- function(start_date,
                                                num_seq)
   }
 
-  seq(from = startDateTime, to = endDateTime, by = by) -> result
+  seq(from = startDateTime, to = endDateTime, by = by) %>%
+    assureInclusionOfEndDateTime(endDateTime) -> result
+
   return(result)
+}
+
+assureInclusionOfEndDateTime <- function(timeSeq, endDateTime) {
+  if (endDateTime %in% timeSeq) {
+    return(timeSeq)
+  } else {
+    timeSeq <- c(timeSeq, endDateTime)
+  }
 }
 
 getIncrementOfTheTimeSequenceUsingNumSeq <- function(startDateTime,
@@ -105,7 +134,7 @@ getIncrementOfTheTimeSequenceUsingNumSeq <- function(startDateTime,
     as.numeric()
 
   if (num_seq > periodAsSec / timeUnitAsSec) {
-    warning("Invalid 'num_seq'! Set the increment as 'time_unit.")
+    FORCE_WARN("Invalid 'num_seq'! Set the increment as 'time_unit.")
     return(timeUnitAsSec)
   }
 
@@ -195,7 +224,7 @@ isTimestampUnitSecond <- function(timestamp) {
   timestamp <- assureNumeric(timestamp)
 
   if (is.null(timestamp)) {
-    warning("Please check that the input for timestamp is proper type. Return NULL.")
+    FORCE_WARN("Please check that the input for timestamp is proper type. Return NULL.")
     return(NULL)
   }
 

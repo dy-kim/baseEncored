@@ -1,7 +1,10 @@
 #' @export
 nor <- function(x, y) {
-  stopifnot(is.logical(x) & is.logical(y))
-  return(!x & !y)
+  if (is.logical(x) & is.logical(y)) {
+    return(!x & !y)
+  } else {
+    FORCE_FATAL("All arguments are expected to be logical. ")
+  }
 }
 
 #' @export

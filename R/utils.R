@@ -1,14 +1,3 @@
-#' @export
-installBaseEncored <- function(bleeding_edge = FALSE) {
-  org <- "EncoredTechR"
-
-  if (bleeding_edge)
-    org <- "dy-kim"
-
-  repo <- paste0(org, "/", "baseEncored")
-  devtools::install_github(repo)
-}
-
 #' Multiple pattern matching.
 #'
 #' \code{grepMulti} matches \code{pattern}, in this case a user name(s)/appliance(s),
@@ -95,8 +84,9 @@ assureNumeric <- function(val) {
       return(NULL)
     },
     warning = function(w) {
-      if (w$message == "NAs introduced by coercion")
+      if (w$message == "NAs introduced by coercion") {
         return(NULL)
+      }
     }
   )
   return(result)
@@ -116,7 +106,9 @@ formatNonSci <- function(value) {
 #'
 #' @export
 rowMedian <- function(x) {
-  stopifnot(is.matrix(x) | is.data.frame(x))
+  if (!(is.matrix(x) | is.data.frame(x))) {
+    FORCE_FATAL("Argument 'x' must be one of the 'matrix' or 'data.frame' type.")
+  }
   matrixAsVector <- as.vector(t(x))
   result <- vectorizedMedian(matrixAsVector, ncol(x))
   rm(matrixAsVector)
@@ -124,23 +116,118 @@ rowMedian <- function(x) {
   return(result)
 }
 
-getExtDataPath <- function(filename) {
-  system.file("extdata",
-              filename,
-              package = "baseEncored")
+#' @export
+getExtDataFilePathOfInstalledPkg <- function(filename) {
+  getExtDataFolderPathOfInstalledPkg() %>%
+    getFilePathFromGivenExtDataFolderPath(filename)
 }
 
-# nolint start
-# dumpUsageForTest <- function(siteId,
-#                              timeUnit,
-#                              powerUnit) {
-#   JediETL::dumpFeederUsageEncoredAPI(siteId,
-#                                      timeUnit,
-#                                      powerUnit,
-#                                      "2016-09-01 00:00",
-#                                      "2016-09-01 03:00") %>%
-#     filter(local_feeder_id == 0) %>%
-#     select(site_id, device_id, date, usage) %>%
-#     PowerUsage(timeUnit, powerUnit)
-# }
-# nolint end
+#' @export
+getExtDataFolderPathOfInstalledPkg <- function() {
+  pkgName <- getPackageName()
+  if (isPackageAttached(pkgName)) {
+    unloadNamespace(pkgName)
+    path <- system.file("extdata", package = pkgName)
+    suppressPackageStartupMessages(require(
+      package = pkgName,
+      quietly = TRUE,
+      character.only = TRUE
+    ))
+  } else {
+    path <- system.file("extdata", package = pkgName)
+  }
+  return(path)
+}
+
+isPackageAttached <- function(pkgName) {
+  paste0("package:", pkgName) %in% search()
+}
+
+getFilePathFromGivenExtDataFolderPath <-
+  function(folderPath, filename) {
+    path <- file.path(folderPath, filename)
+
+    if (file.exists(path)) {
+      return(path)
+    } else {
+      FORCE_WARN(paste0("File does not exists: '", path, "'"))
+      return("")
+    }
+  }
+
+#' @export
+getExtDataFilePathOfDevelopingPkg <- function(filename) {
+  getExtDataFolderPathOfDevelopingPkg() %>%
+    getFilePathFromGivenExtDataFolderPath(filename)
+}
+
+#' @export
+getExtDataFolderPathOfDevelopingPkg <- function() {
+  pkgName <- getPackageName()
+  if (isWdPkgProj(pkgName)) {
+    path <- file.path(getwd(), "inst", "extdata")
+    return(path)
+  }
+}
+
+isWdPkgProj <- function(pkgName) {
+  return(hasWdPkgDescription(pkgName) & hasWdRproj(pkgName))
+}
+
+hasWdPkgDescription <- function(pkgName) {
+  pathOfDescriptionFile <- file.path(getwd(), "DESCRIPTION")
+  pkgNameInDescriptionFile <-
+    read.dcf(file = pathOfDescriptionFile, fields = "Package") %>%
+    as.character()
+
+  return(pkgName == pkgNameInDescriptionFile)
+}
+
+hasWdRproj <- function(pkgName) {
+  nameOfRprojFile <- paste0(pkgName, ".Rproj")
+  pathOfRprojFile <- file.path(getwd(), nameOfRprojFile)
+  return(file.exists(pathOfRprojFile))
+}
+
+#' Start producing test answer
+#'
+#' @description Set the global option \code{produceTestAnswer} as \code{TRUE}
+#' @seealso \code{\link{stopProducingTestAnswer}}, \code{\link{getStatusOfProducingTestAnswer}}
+#'
+#' @export
+startProducingTestAnswer <- function() {
+  options(produceTestAnswer = TRUE)
+  getStatusOfProducingTestAnswer(FALSE)
+}
+
+#' Stop producing test answer
+#'
+#' @description Set the global option \code{produceTestAnswer} as \code{FALSE}
+#' @seealso \code{\link{startProducingTestAnswer}}, \code{\link{getStatusOfProducingTestAnswer}}
+#'
+#' @export
+stopProducingTestAnswer <- function() {
+  options(produceTestAnswer = FALSE)
+  getStatusOfProducingTestAnswer(FALSE)
+}
+
+#' Get the status of producing test answer
+#'
+#' @description Get the global option \code{produceTestAnswer}
+#' @param returnStats A logical controls return status or not
+#' @seealso \code{\link{startProducingTestAnswer}}, \code{\link{stopProducingTestAnswer}}
+#'
+#' @export
+getStatusOfProducingTestAnswer <- function(returnStatus = TRUE) {
+  status <- getOption("produceTestAnswer")
+
+  if (is.null(status)) {
+    # produceTestAnswer: DEFAULT should be FALSE
+    status <- FALSE
+  }
+
+  FORCE_INFO(paste("Option of producing test answers:", status))
+  if (returnStatus) {
+    return(status)
+  }
+}

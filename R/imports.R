@@ -1,6 +1,8 @@
-#'@useDynLib baseEncored
+#' @useDynLib baseEncored
 NULL
 
+#' @import ForceLogger
+NULL
 #' @import bcR
 NULL
 #' @import data.table

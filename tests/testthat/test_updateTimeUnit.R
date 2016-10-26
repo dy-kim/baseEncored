@@ -2,22 +2,22 @@ context("Test updateTimeUnit.PowerUsage")
 
 suppressPackageStartupMessages(library(dplyr))
 
-test_that("Convert human date to time class with selected timezone",
+test_that(desc = "Convert human date to time class with selected timezone",
           code = {
             usage15min <-
-              readRDS(getExtDataPath("sample_PowerUsage_multi-sites_15min.rds"))
+              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_15min.rds") %>%
+              readRDS()
             usageHourlyUpdated <-
               updateTimeUnit.PowerUsage(usage15min, "hourly")
             usageHourly <-
-              readRDS(getExtDataPath("sample_PowerUsage_multi-sites_hourly.rds"))
+              getExtDataFilePathOfInstalledPkg("sample_PowerUsage_multi-sites_hourly.rds") %>%
+              readRDS()
 
-            expect_equal(
-              getTimeUnit.PowerUsage(usageHourlyUpdated),
-              getTimeUnit.PowerUsage(usageHourly)
-            )
-            expect_equal(
-              getPowerUnit.PowerUsage(usageHourlyUpdated),
-              getPowerUnit.PowerUsage(usageHourly)
-            )
+            getTimeUnit.PowerUsage(usageHourlyUpdated) %>%
+              expect_equal(getTimeUnit.PowerUsage(usageHourly))
+
+            getPowerUnit.PowerUsage(usageHourlyUpdated) %>%
+              expect_equal(getPowerUnit.PowerUsage(usageHourly))
+
             expect_equivalent(usageHourlyUpdated, usageHourly)
           })

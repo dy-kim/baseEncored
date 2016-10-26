@@ -4,7 +4,7 @@ PowerUsage <- function(obj, time_unit, power_unit) {
   power_unit %<>% match.arg(choices = getPowerUnitSet())
 
   if (!is.data.frame(obj)) {
-    warning("NOTICE ME: only data.frame is allowed for Power Usage class.")
+    FORCE_WARN("Only data.frame is allowed for Power Usage class.")
     return(obj)
   }
 
@@ -17,7 +17,7 @@ PowerUsage <- function(obj, time_unit, power_unit) {
 
 #' @export
 updatePower.PowerUsage <- function(obj, power_unit) {
-  warning("Replace this function to 'updatePowerUnit.PowerUsage'!")
+  FORCE_WARN("Replace this function to 'updatePowerUnit.PowerUsage'!")
   return(updatePowerUnit.PowerUsage(obj, power_unit))
 }
 
@@ -25,8 +25,9 @@ updatePower.PowerUsage <- function(obj, power_unit) {
 updatePowerUnit.PowerUsage <- function(obj, powerUnit) {
   powerUnit %<>% match.arg(choices = getPowerUnitSet())
 
-  if (!("PowerUsage" %in% class(obj)))
-    stop("NOTICE ME: only PowerUsage object is allowed for updating.")
+  if (!("PowerUsage" %in% class(obj))) {
+    FORCE_FATAL("Object is not PowerUsage class.")
+  }
 
   timeUnitOriginal <- getTimeUnit.PowerUsage(obj)
   powerUnitOriginal <- getPowerUnit.PowerUsage(obj)
@@ -44,13 +45,17 @@ updatePowerUnit.PowerUsage <- function(obj, powerUnit) {
 updateTimeUnit.PowerUsage <- function(obj, timeUnit) {
   timeUnit %<>% match.arg(choices = getTimeUnitSet())
 
-  if (!("PowerUsage" %in% class(obj)))
-    stop("NOTICE ME: only PowerUsage object is allowed for updating.")
+  if (!("PowerUsage" %in% class(obj))) {
+    FORCE_FATAL("NOTICE ME: only PowerUsage object is allowed for updating.")
+  }
 
-  if (!lubridate::is.POSIXt(obj$date))
-    stop("Column 'date' must be a POSIXt class!")
+  if (!lubridate::is.POSIXt(obj$date)) {
+    FORCE_FATAL("Column 'date' must be a POSIXt class!")
+  }
 
-  stopifnot(isTimeUnitUpdatable(obj, timeUnit))
+  if (!isTimeUnitUpdatable(obj, timeUnit)) {
+    FORCE_FATAL("Time unit is not updatable.")
+  }
 
   timeUnitOriginal <- getTimeUnit.PowerUsage(obj)
   powerUnitOriginal <- getPowerUnit.PowerUsage(obj)
@@ -114,10 +119,11 @@ convertTimeUnit <- function(obj, to) {
   if (to == "hourly") {
     objDt <- objDt[count == NUM_OF_15MIN_IN_AN_HOUR]
   }
-  objDt <- objDt[, count := NULL]
+  objConverted <- objDt[, count := NULL]
   # nolint end
 
-  return(objDt)
+  class(objConverted) <- class(obj)
+  return(objConverted)
 }
 
 updateDateTimeColumn <- function(obj, to) {
