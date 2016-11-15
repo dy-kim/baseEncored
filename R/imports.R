@@ -16,7 +16,5 @@ NULL
 NULL
 #' @importFrom stringr str_replace
 NULL
-#' @importFrom devtools install_github
-NULL
 #' @importFrom magrittr %>% %<>%
 NULL

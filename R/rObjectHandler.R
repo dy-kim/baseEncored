@@ -8,7 +8,7 @@ isZeroRow <- function(obj_df) {
   if (is.data.frame(obj_df)) {
     return(nrow(obj_df) == 0L)
   } else {
-    FORCE_FATAL("Class of 'obj_df' must be a data.frame.")
+    return(NROW(obj_df) == 0L)
   }
 }
 
