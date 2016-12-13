@@ -117,79 +117,18 @@ rowMedian <- function(x) {
 }
 
 #' @export
-getExtDataFilePathOfInstalledPkg <- function(filename, pkgName) {
-    getExtDataFolderPathOfInstalledPkg(pkgName) %>%
-      getFilePathFromGivenExtDataFolderPath(filename)
-  }
+getFunctionEnvironmentAtBreakPoint <- function(basePath = getwd()) {
+  parentEnv <- parent.frame()
+  parentFunctionName <- as.character(sys.call(-1L))[1]
+  envFileName <- paste0("funcEnv_", parentFunctionName, ".RData.gz")
+  envFilePath <- file.path(basePath, envFileName)
 
-#' @export
-getExtDataFolderPathOfInstalledPkg <- function(pkgName) {
-    if (isPackageAttached(pkgName)) {
-      unloadNamespace(pkgName)
-      path <- system.file("extdata", package = pkgName)
-      suppressPackageStartupMessages(require(
-        package = pkgName,
-        quietly = TRUE,
-        character.only = TRUE
-      ))
-    } else {
-      path <- system.file("extdata", package = pkgName)
-    }
-    return(path)
-  }
-
-isPackageAttached <- function(pkgName) {
-  paste0("package:", pkgName) %in% search()
-}
-
-getFilePathFromGivenExtDataFolderPath <- function(folderPath, filename) {
-    path <- file.path(folderPath, filename)
-
-    if (file.exists(path)) {
-      return(path)
-    } else {
-      FORCE_WARN(paste0("File does not exists: '", path, "'"))
-      return("")
-    }
-  }
-
-#' @export
-getExtDataFilePathOfDevelopingPkg <- function(filename, pkgName) {
-    getExtDataFolderPathOfDevelopingPkg(pkgName) %>%
-      getFilePathFromGivenExtDataFolderPath(filename)
-  }
-
-#' @export
-getExtDataFolderPathOfDevelopingPkg <- function(pkgName) {
-    if (isWdPkgProj(pkgName)) {
-      path <- file.path(getwd(), "inst", "extdata")
-      return(path)
-    } else {
-      paste("Current working directory does not include a",
-            pkgName,
-            "R package project.") %>%
-        FORCE_WARN()
-      return("")
-    }
-  }
-
-isWdPkgProj <- function(pkgName) {
-  return(hasWdPkgDescription(pkgName) & hasWdRproj(pkgName))
-}
-
-hasWdPkgDescription <- function(pkgName) {
-  pathOfDescriptionFile <- file.path(getwd(), "DESCRIPTION")
-  pkgNameInDescriptionFile <-
-    read.dcf(file = pathOfDescriptionFile, fields = "Package") %>%
-    as.character()
-
-  return(pkgName == pkgNameInDescriptionFile)
-}
-
-hasWdRproj <- function(pkgName) {
-  nameOfRprojFile <- paste0(pkgName, ".Rproj")
-  pathOfRprojFile <- file.path(getwd(), nameOfRprojFile)
-  return(file.exists(pathOfRprojFile))
+  save(
+    list = ls(envir = parentEnv),
+    file = envFilePath,
+    envir = parentEnv,
+    compress = "gzip"
+  )
 }
 
 #' Start producing test answer
@@ -198,7 +137,8 @@ hasWdRproj <- function(pkgName) {
 #' @seealso \code{\link{stopProducingTestAnswer}}, \code{\link{getStatusOfProducingTestAnswer}}
 #'
 #' @export
-startProducingTestAnswer <- function() {
+startProducingTestAnswer <- function(devPkgPath = getwd()) {
+  options(devPkgPath = devPkgPath)
   options(produceTestAnswer = TRUE)
   getStatusOfProducingTestAnswer(FALSE)
 }
@@ -210,6 +150,7 @@ startProducingTestAnswer <- function() {
 #'
 #' @export
 stopProducingTestAnswer <- function() {
+  options(devPkgPath = NULL)
   options(produceTestAnswer = FALSE)
   getStatusOfProducingTestAnswer(FALSE)
 }
@@ -233,4 +174,120 @@ getStatusOfProducingTestAnswer <- function(returnStatus = TRUE) {
   if (returnStatus) {
     return(status)
   }
+}
+
+#' @export
+getExtDataFilePathOfInstalledPkg <- function(filename, pkgName) {
+  getExtDataFolderPathOfInstalledPkg(pkgName) %>%
+    getFilePathFromGivenExtDataFolderPath(filename)
+}
+
+#' @export
+getExtDataFolderPathOfInstalledPkg <- function(pkgName) {
+  if (isPackageAttached(pkgName)) {
+    unloadNamespace(pkgName)
+    path <- system.file("extdata", package = pkgName)
+    suppressPackageStartupMessages(require(
+      package = pkgName,
+      quietly = TRUE,
+      character.only = TRUE
+    ))
+  } else {
+    path <- system.file("extdata", package = pkgName)
+  }
+  return(path)
+}
+
+isPackageAttached <- function(pkgName) {
+  paste0("package:", pkgName) %in% search()
+}
+
+getFilePathFromGivenExtDataFolderPath <-
+  function(folderPath, filename) {
+    path <- file.path(folderPath, filename)
+
+    if (file.exists(path)) {
+      return(path)
+    } else {
+      FORCE_WARN(paste0("File does not exists: '", path, "'"))
+      return("")
+    }
+  }
+
+#' @export
+getExtDataFilePathOfDevelopingPkg <-
+  function(filename, pkgName, devPkgPath = getDevPkgPath()) {
+    getExtDataFolderPathOfDevelopingPkg(pkgName, devPkgPath) %>%
+      getFilePathFromGivenExtDataFolderPath(filename)
+  }
+
+#' @export
+getExtDataFolderPathOfDevelopingPkg <-
+  function(pkgName, devPkgPath = getDevPkgPath()) {
+    if (is.null(devPkgPath)) {
+      FORCE_FATAL(
+        "The argument 'devPkgPath' is NULL. Please set correct path of a package developing folder."
+      )
+    }
+
+    if (isPkgProj(pkgName, devPkgPath)) {
+      path <- file.path(devPkgPath, "inst", "extdata")
+      return(path)
+    } else {
+      paste("Current working directory does not include a",
+            pkgName,
+            "R package project.") %>%
+        FORCE_WARN()
+      return("")
+    }
+  }
+
+isPkgProj <- function(pkgName, path) {
+  return(hasPkgDescription(pkgName, path) & hasRproj(pkgName, path))
+}
+
+hasPkgDescription <- function(pkgName, path) {
+  pathOfDescriptionFile <- file.path(path, "DESCRIPTION")
+  if (!file.exists(pathOfDescriptionFile)) {
+    return(FALSE)
+  }
+
+  pkgNameInDescriptionFile <-
+    read.dcf(file = pathOfDescriptionFile, fields = "Package") %>%
+    as.character()
+
+  return(pkgName == pkgNameInDescriptionFile)
+}
+
+hasRproj <- function(pkgName, path) {
+  nameOfRprojFile <- paste0(pkgName, ".Rproj")
+  pathOfRprojFile <- file.path(path, nameOfRprojFile)
+  return(file.exists(pathOfRprojFile))
+}
+
+getDevPkgPath <- function() {
+  getOption("devPkgPath")
+}
+
+#' @export
+saveTestAnswer <- function(obj, ansFileName, pkgName) {
+  ansFilePath <-
+    getExtDataFolderPathOfDevelopingPkg(pkgName) %>%
+    file.path(ansFileName)
+  saveRDS(obj, ansFilePath)
+  return(ansFilePath)
+}
+
+#' @export
+getTestAnswerFilePath <- function(ansFileName, pkgName) {
+  ansFilePath <-
+    getExtDataFilePathOfInstalledPkg(ansFileName, pkgName)
+
+  if (ansFilePath == "") {
+    FORCE_FATAL(
+      "Make an answer file before the test.
+      After making an answer file, please 'Clean and Rebuild'."
+    )
+  }
+  return(ansFilePath)
 }

@@ -4,7 +4,7 @@
 \alias{startProducingTestAnswer}
 \title{Start producing test answer}
 \usage{
-startProducingTestAnswer()
+startProducingTestAnswer(devPkgPath = getwd())
 }
 \description{
 Set the global option \code{produceTestAnswer} as \code{TRUE}

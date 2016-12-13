@@ -1,7 +1,7 @@
 Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
-Version: 0.2.4
+Version: 0.2.5
 Authors@R: person("Daeyoung", "Kim", email = "dykim22@encoredtech.com", role = c("aut", "cre"))
 Maintainer: Daeyoung Kim <dykim22@encoredtech.com>
 Description:
