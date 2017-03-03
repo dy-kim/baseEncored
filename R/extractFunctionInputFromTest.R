@@ -1,3 +1,10 @@
+#' Extract function input while running test code
+#'
+#' @param functionName A string.
+#' @param testPkg Same as \code{pkg} in \code{\link[devtools]{test}}. Package description, can be path or package name. See \code{\link[devtools]{as.package}} for more information
+#' @param baseTestCode Same as \code{filter} in \code{\link[devtools]{test}}. Only tests with file names matching this regular expression will be executed. Matching will take on the file name after it has been stripped of "test-" and ".R"
+#' @param cache Directory in which to store exported function input
+#'
 #' @export
 extractFunctionInputFromTest <- function(functionName,
                                          testPkg = ".",
