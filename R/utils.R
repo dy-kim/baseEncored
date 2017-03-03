@@ -116,21 +116,6 @@ rowMedian <- function(x) {
   return(result)
 }
 
-#' @export
-getFunctionEnvironmentAtBreakPoint <- function(basePath = getwd()) {
-  parentEnv <- parent.frame()
-  parentFunctionName <- as.character(sys.call(-1L))[1]
-  envFileName <- paste0("funcEnv_", parentFunctionName, ".RData.gz")
-  envFilePath <- file.path(basePath, envFileName)
-
-  save(
-    list = ls(envir = parentEnv),
-    file = envFilePath,
-    envir = parentEnv,
-    compress = "gzip"
-  )
-}
-
 #' Start producing test answer
 #'
 #' @description Set the global option \code{produceTestAnswer} as \code{TRUE}
