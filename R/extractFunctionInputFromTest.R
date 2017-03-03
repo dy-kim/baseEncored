@@ -24,13 +24,14 @@ extractFunctionInputFromTest <- function(functionName,
   }
 
   f <- match.fun(functionName)
-  if (!isFunctionInputCaptured(f, testInputCache)) {
-    printTestStartInstruction(testInputCache)
+  if (!isFunctionInputCaptured(f)) {
+    printInstructionToExtractFunctionInput()
     stop("Please follow above information.")
   }
 
   if (!isFuncEnvironFileExisting(testInputCache, functionName)) {
     setTargetedFunction(functionName, optionName = SAVE_FUNC_ENVIRON)
+    setFuncInputCapturePath(testInputCache)
     testthat::test_file(path = actualTestCodePath, reporter = "list")
     unsetTargetedFunction(functionName, optionName = SAVE_FUNC_ENVIRON)
   }
@@ -54,17 +55,17 @@ getTestCodePath <- function(testPkg, baseTestCode) {
   return(path)
 }
 
-isFunctionInputCaptured <- function(f, testInputCache) {
+isFunctionInputCaptured <- function(f) {
   answer <-
-    getFunctionInputCapturingCode(testInputCache) %>%
+    getFunctionInputCapturingCode() %>%
     removeAllWhitespace()
   test <- getFirstLineOfFunction(f) %>% removeAllWhitespace()
   return(identical(answer, test))
 }
 
-getFunctionInputCapturingCode <- function(testInputCache) {
-  sprintf("baseEncored::saveFunctionEnvironment(savePath = \"%s\")",
-          testInputCache)
+getFunctionInputCapturingCode <- function() {
+  sprintf("baseEncored::saveFunctionEnvironment(savePath = getOption(\"%s\"))",
+          FUNC_INPUT_CAPTURE_PATH)
 }
 
 #' @importFrom stringr str_replace_all
@@ -72,9 +73,9 @@ removeAllWhitespace <- function(x) {
   stringr::str_replace_all(x, " ", "")
 }
 
-printTestStartInstruction <- function(testInputCache) {
+printInstructionToExtractFunctionInput <- function() {
   FORCE_INFO("Insert following line to the first line of the function definition.")
-  FORCE_INFO(getFunctionInputCapturingCode(testInputCache))
+  FORCE_INFO(getFunctionInputCapturingCode())
 }
 
 getFirstLineOfFunction <- function(f) {
@@ -87,4 +88,15 @@ getFirstLineOfFunction <- function(f) {
 
 findIndexOfLeftCurlyBraces <- function(x) {
   grep(pattern = "\\{", x = x)
+}
+
+setFuncInputCapturePath <- function(path) {
+  optionName <- FUNC_INPUT_CAPTURE_PATH
+
+  oldOption <- getOption(optionName)
+  newOption <- list(path)
+  names(newOption) <- optionName1
+  options(newOption)
+
+  return(invisible(oldOption))
 }

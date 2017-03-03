@@ -106,6 +106,8 @@ formatNonSci <- function(value) {
 #'
 #' @export
 rowMedian <- function(x) {
+  baseEncored::saveFunctionEnvironment(savePath = getOption("func.input.capture.path"))
+
   if (!(is.matrix(x) | is.data.frame(x))) {
     FORCE_FATAL("Argument 'x' must be one of the 'matrix' or 'data.frame' type.")
   }
