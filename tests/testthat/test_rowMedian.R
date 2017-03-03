@@ -1,6 +1,6 @@
 context("Test rowMedian")
 
-test_that("Convert human date to time class with selected timezone",
+test_that("Test if it gets median for each row of a matrix",
           code = {
             medianColumn <- 0:100
             testDataFrame <-
