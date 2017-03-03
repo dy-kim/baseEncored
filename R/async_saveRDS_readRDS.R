@@ -8,7 +8,9 @@ readRdsAsync <- function(...) {
 }
 
 withAsnyc <- function(f, ...) {
+  # nolint start
   future({
     f(...)
   }) %plan% multiprocess
+  # nolint end
 }
