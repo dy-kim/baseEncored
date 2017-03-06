@@ -5,6 +5,7 @@
 #' @param baseTestCode Same as \code{filter} in \code{\link[devtools]{test}}. Only tests with file names matching this regular expression will be executed. Matching will take on the file name after it has been stripped of "test-" and ".R"
 #' @param cache Directory in which to store exported function input
 #'
+#' @importFrom testthat test_file
 #' @export
 extractFunctionInputFromTest <- function(functionName,
                                          testPkg = ".",
@@ -37,7 +38,7 @@ extractFunctionInputFromTest <- function(functionName,
   }
 
   if (!isFuncEnvironFileExisting(testInputCache, functionName)) {
-    FORCE_FATAL("Function %s is not in the test %s.R!",
+    FORCE_FATAL("Function %s is not in the test '%s.R!'",
                 functionName,
                 actualTestCodeName)
   }
@@ -95,7 +96,7 @@ setFuncInputCapturePath <- function(path) {
 
   oldOption <- getOption(optionName)
   newOption <- list(path)
-  names(newOption) <- optionName1
+  names(newOption) <- optionName
   options(newOption)
 
   return(invisible(oldOption))
