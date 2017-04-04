@@ -30,4 +30,3 @@ setdiffNumericForcedCommutative(a, b)
 into numeric and finds the set difference. \cr
 \code{\link{searchMetaData}}
 }
-

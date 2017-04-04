@@ -34,4 +34,3 @@ grepMulti(appliance.name, appliance.list) # 2 4
 appliance and returns the selected row of data. \cr
 \code{\link{searchMetaData}}
 }
-

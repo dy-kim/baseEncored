@@ -15,4 +15,3 @@ Get the global option \code{produceTestAnswer}
 \seealso{
 \code{\link{startProducingTestAnswer}}, \code{\link{stopProducingTestAnswer}}
 }
-

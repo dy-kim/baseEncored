@@ -12,4 +12,3 @@ Set the global option \code{produceTestAnswer} as \code{TRUE}
 \seealso{
 \code{\link{stopProducingTestAnswer}}, \code{\link{getStatusOfProducingTestAnswer}}
 }
-

@@ -15,4 +15,3 @@ Form row medians for numeric arrays (or data frames).}
 \description{
 Form Row Medians
 }
-

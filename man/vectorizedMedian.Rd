@@ -14,4 +14,3 @@ vectorizedMedian(x, chunkSize)
 \description{
 Calculate median for each chunks of given vector with customizable chunk size.
 }
-

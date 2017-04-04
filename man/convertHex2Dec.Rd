@@ -12,4 +12,3 @@ convertHex2Dec(x)
 \description{
 Convert hexa value to decimal value
 }
-

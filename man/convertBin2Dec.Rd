@@ -12,4 +12,3 @@ convertBin2Dec(x)
 \description{
 Convert binary value to decimal value
 }
-

@@ -2,20 +2,22 @@ Package: baseEncored
 Type: Package
 Title: Base R packages for Encored Technologies
 Version: 0.2.5
-Authors@R: person("Daeyoung", "Kim", email = "dykim22@encoredtech.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Daeyoung", "Kim", email = "dykim22@encoredtech.com", role = c("aut", "cre")))
 Maintainer: Daeyoung Kim <dykim22@encoredtech.com>
 Description:
-    Supplying basic functionalities required for the custom packages designed by Encored Technologies.
+    Supplying basic functionalities required for the custom packages 
+    designed by Encored Technologies.
 Depends:
     R (>= 3.2.0)
 Imports:
     ForceLogger (>= 0.0.1),
     Rcpp (>= 0.12.5),
-    bcR (>= 0.1.1),
-    data.table (>= 1.9.6),
+    bcR (>= 0.1.2),
+    data.table (>= 1.10.0),
     dplyr (>= 0.5.0),
-    lubridate (>= 1.5.0),
-    magrittr (>= 1.5.0),
+    lubridate (>= 1.6.0),
+    magrittr (>= 1.5),
     plyr (>= 1.8.3),
     stringr (>= 1.0.0)
 Suggests:
@@ -26,6 +28,6 @@ Remotes:
     github::dy-kim/bcR
 License: LGPL
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 LinkingTo:
     Rcpp

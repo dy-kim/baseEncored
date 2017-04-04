@@ -29,4 +29,3 @@ setdiffNumericForced(second, first)
 commutative \code{setdiffNumericForced}, returning the total set difference. \cr
 \code{\link{searchMetaData}}
 }
-
