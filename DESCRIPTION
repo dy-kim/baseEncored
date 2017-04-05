@@ -24,8 +24,8 @@ Suggests:
     testthat,
     lintr
 Remotes:
-    github::EncoredTechR/ForceLogger,
-    github::dy-kim/bcR
+    EncoredTechR/ForceLogger,
+    dy-kim/bcR
 License: LGPL
 LazyData: TRUE
 RoxygenNote: 6.0.1
