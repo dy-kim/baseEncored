@@ -20,7 +20,7 @@ Imports:
     lubridate (>= 1.6.0),
     magrittr (>= 1.5),
     plyr (>= 1.8.3),
-    purrr (>= 0.2.2),
+    purrr (>= 0.2.3),
     stringr (>= 1.0.0)
 Suggests:
     testthat,
