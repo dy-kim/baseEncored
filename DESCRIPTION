@@ -26,7 +26,7 @@ Suggests:
     testthat,
     lintr
 Remotes:
-    EncoredTechR/ForceLogger,
+    dy-kim/ForceLogger,
     dy-kim/bcR
 License: LGPL
 LazyData: TRUE
